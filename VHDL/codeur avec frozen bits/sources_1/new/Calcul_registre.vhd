@@ -54,7 +54,7 @@ signal flag : integer :=0;
 begin
 pr_calcul : process(clk,rst)
     begin
-            if (clk ='1' and clk'event) then
+            if rising_edge(clk) then
                 if (rst ='1') then
                     registre <= (others => '0');
                     en_out <= '0';

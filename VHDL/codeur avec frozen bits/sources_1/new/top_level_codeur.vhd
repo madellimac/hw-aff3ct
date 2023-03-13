@@ -44,7 +44,7 @@ entity top_level_codeur is
       clk : in std_logic;
       rst : in std_logic;
       en_in : in std_logic;
-      vector_frozen : in std_logic_vector (3 downto 0); --désigne la position des bits gelés avec en 'MSB' la position la plus petite
+      vector_frozen : in std_logic_vector (Nb_bits_N downto 0); --désigne la position des bits gelés avec en 'MSB' la position la plus petite
       data_in : in std_logic;
       en_out : out std_logic;
       data_out : out std_logic);
