@@ -32,19 +32,19 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 --On suppose que le premier bit reçu est le LSB
---exemple : si on envoie un vecteur : (01) avec un vecteur_frozen =(0010), 
+--exemple : si on envoie un vecteur : (01) avec un vecteur_frozen =(0101), 
 --          le vecteur en entrée de calcul registre sera (1000) avec (u0, u1 ,u2, u3)
 --          En effet : (01) -> (10) [inversion data_entrée pour faciliter calcul_registre] -> (1000) [ajout des frozen bits] -> code = (1000) donc data_out = 0 puis 0 puis 0 puis 1
 
 --Vector frozen pas encore générique.
 entity top_level_codeur is
-      generic (Nb_bits_N : integer :=4;
-               Nb_bits_K : integer :=2);
+      generic (Nb_bits_N : integer :=10;
+               Nb_bits_K : integer :=6);
       Port (
       clk : in std_logic;
       rst : in std_logic;
       en_in : in std_logic;
-      vector_frozen : in std_logic_vector (3 downto 0); --désigne la position des bits gelés avec en 'MSB' la position la plus petite
+      vector_frozen : in std_logic_vector (Nb_bits_N-1 downto 0); --désigne la position des bits gelés avec en 'MSB' la position la plus petite
       data_in : in std_logic;
       en_out : out std_logic;
       data_out : out std_logic);
@@ -68,7 +68,7 @@ component Comparateur is
             Nb_bits_N : integer);
   Port (clk : in std_logic;
         rst : in std_logic;
-        vector_frozen: in std_logic_vector(3 downto 0);
+        vector_frozen: in std_logic_vector(Nb_bits_N-1 downto 0);
         enable_registre_in : in std_logic; --registre d'entrée prêt pendant N*T_clk
         registre_in : in std_logic_vector(Nb_bits_k-1 downto 0);
         enable_out : out std_logic;

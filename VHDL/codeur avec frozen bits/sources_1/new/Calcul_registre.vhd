@@ -80,37 +80,5 @@ pr_calcul : process(clk,rst)
              end if;
 end process;
 
---pr_compteur_stop : process (clk,rst,en_in,compteur_en_out)
---    Begin
---        if (clk ='1' and clk'event) then
---            if (rst = '1') then
---                compteur_stop <= 0;
---            else 
---                if ((en_in = '1')) then
---                    if (compteur_stop < NB_bits_N) then
---                        compteur_stop <= compteur_stop + 1;
---                    end if;
---                elsif (compteur_en_out = Nb_bits_N) then
---                    compteur_stop <= 0;
---                end if;
-                
---            end if;
---        end if;
---    end process;
-    
-    
---pr_compteur_en_out : process (clk, rst, compteur_stop)
---    Begin
---        if (clk ='1' and clk'event) then
---            if (rst = '1') then
---                compteur_en_out <= 0;
---            else
---                if ((compteur_stop = Nb_bits_N) and (compteur_en_out < Nb_bits_N)) then 
---                     compteur_en_out <= compteur_en_out +1;
---                else 
---                    compteur_en_out <= 0;
---                end if;
---            end if;
---        end if;
---    end process;
+
 end Behavioral_calcul_registre;

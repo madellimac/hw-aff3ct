@@ -44,19 +44,19 @@ component top_level_codeur is
       clk : in std_logic;
       rst : in std_logic;
       en_in : in std_logic;
-      vector_frozen : in std_logic_vector (3 downto 0);
+      vector_frozen : in std_logic_vector (Nb_bits_N-1 downto 0);
       data_in : in std_logic;
       en_out : out std_logic;
       data_out : out std_logic
       );
 end component;
   
-constant cnst_NB_bits_N : integer :=4;
-constant cnst_NB_bits_K : integer :=2;
+constant cnst_NB_bits_N : integer :=10;
+constant cnst_NB_bits_K : integer :=6;
 signal sig_clk : std_logic :='0';  
 signal sig_rst : std_logic;  
 signal sig_en_in : std_logic;
-signal sig_vector_frozen : std_logic_vector(3 downto 0);
+signal sig_vector_frozen : std_logic_vector(cnst_NB_bits_N -1 downto 0);
 signal sig_en_out : std_logic:='0';
 signal sig_data_in : std_logic;
 signal sig_data_out : std_logic:='0';
@@ -81,7 +81,7 @@ begin
     process
         Begin
             sig_rst<='1';
-            sig_vector_frozen <= "0010";
+            sig_vector_frozen <= "1001010001"; --positions 1 et 3 gelées
             wait for 20 ns;
             sig_rst <= '0';
             wait for 20 ns;
@@ -90,11 +90,41 @@ begin
             wait for 10 ns;
             sig_en_in <= '0';
             sig_data_in <='0';
-                 
-            wait for 20 ns;
+            
+            wait for 10 ns;
+            sig_data_in <= '0';
             sig_en_in <= '1';
             wait for 10 ns;
             sig_en_in <= '0';
+            sig_data_in <='0';
+                 
+            wait for 10 ns;
+            sig_en_in <= '1';
+            sig_data_in <= '0';
+            wait for 10 ns;
+            sig_en_in <= '0';
+            sig_data_in <= '0';
+            
+            wait for 10 ns;
+            sig_en_in <= '1';
+            sig_data_in <= '1';
+            wait for 10 ns;
+            sig_en_in <= '0';
+            sig_data_in <= '0';
+            
+            wait for 10 ns;
+            sig_en_in <= '1';
+            sig_data_in <= '0';
+            wait for 10 ns;
+            sig_en_in <= '0';
+            sig_data_in <= '0';
+            
+            wait for 10 ns;
+            sig_en_in <= '1';
+            sig_data_in <= '1';
+            wait for 10 ns;
+            sig_en_in <= '0';
+            sig_data_in <= '0';
             wait;
         end process;
 
