@@ -88,15 +88,6 @@ def generate_kernel_matrix(N):
 
     return matrix
 
-# def encode(bits_to_encode):
-#     encoded_bits = 0
-
-#     # encoded_bits = encoded_bits xor (bits_to_encode & encoded_bits(n-1 downto 1))
-#     for i in range(n):
-#         #print(bits_to_encode[i] << (n-1) + (encoded_bits >> 1))
-#         encoded_bits = encoded_bits ^ ((bits_to_encode[i] << (n-1)) + (encoded_bits >> 1))
-#         print(bin(encoded_bits))
-
 def encode(data_in, frozen_bits):
     """
     The data is multiply with each row in the matrix.
@@ -126,22 +117,30 @@ def encode(data_in, frozen_bits):
     
     kernel_matrix = generate_kernel_matrix(N)
     data_to_encode = add_frozen_in_data(data_in, frozen_bits)
+    #convert data to encode for bitwise operation
+    data_to_encode = np.array(data_to_encode, dtype=int)
+    # reverse data to encode
+    data_to_encode = data_to_encode[::-1]
 
-    encoded_bits = np.zeros(N)
+    encoded_bits = np.zeros(N, dtype=int)
 
-    
-    for i in range(N): # Rows
-        for j in range(N): #column
-            encoded_bits[i] += data_to_encode[j] * kernel_matrix[i, j]
-        encoded_bits[i]=encoded_bits[i] % 2 # It's a bit, so a value between 1 and 0
+    # multiply the data with the kernel matrix
+    for i in range(0, N):
+        for j in range(0, N):
+            encoded_bits[i] += data_to_encode[j] & kernel_matrix[i, j]
+        # the array is binary so we can do a modulo 2 to get the right value
+        encoded_bits[i] = encoded_bits[i]%2
+
+    # inverse the encoded bits
+    encoded_bits = encoded_bits[::-1]
 
     return encoded_bits
 
 if __name__ == '__main__':
 
     #verify that this works with the aff3ct    
-    k=4
-    n=8
+    # k=4
+    # n=8
 
     data_in = [1,1,0,0]
     frozen_bits = [1,1,1,1,0,0,0,0]
