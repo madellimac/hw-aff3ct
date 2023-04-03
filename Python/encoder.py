@@ -143,14 +143,7 @@ if __name__ == '__main__':
     # n=8
 
     data_in = [1,1,0,0]
-    frozen_bits = [1,1,1,1,0,0,0,0]
-    # frozen_bits = generate_frozen_bits()
-
-    # data_to_encode = add_frozen_in_data(frozen_bits)
-
-    # print(data_to_encode)
-
-    # kernel_matrix = generate_kernel_matrix(n)
+    frozen_bits = [1,1,1,0,1,0,0,0] # default value for k = 4 and N = 8
 
     encoded_bits = encode(data_in, frozen_bits)
 

@@ -1,5 +1,9 @@
+""" Generate the frozen bits for the polar encoder.
+ 
+"""
+
 import sys
-sys.path.insert(0, '../../py_aff3ct/build/lib')
+sys.path.insert(0, '/mnt/d/OneDrive/Etude/Enseirb/Projet S8/py_aff3ct/build/lib')
 import numpy as np
 import time
 import math
@@ -10,7 +14,7 @@ import py_aff3ct.tools.frozenbits_generator as tool_fb
 import py_aff3ct.tools.noise as tool_noise
 import py_aff3ct.module.encoder as polar_encoder
 
-# function get the frozen bits
+# Get the frozen bits from the py_aff3ct library depending on k and N
 def get_frozen_bits(K, N):
     ebn0 = 6
 
@@ -28,3 +32,14 @@ def get_frozen_bits(K, N):
     frozen_bits = fbgen.generate()
 
     return frozen_bits
+
+
+# __main__ that take two arguments as parameter: k and N
+# print the frozen bits
+if __name__ == "__main__":
+    # get the frozen bits depending on k and N
+    frozen_bits = get_frozen_bits(int(sys.argv[1]), int(sys.argv[2]))
+    
+    # print the frozen bits
+    print(frozen_bits)
+
