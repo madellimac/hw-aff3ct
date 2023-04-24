@@ -1,35 +1,7 @@
 import random
 import numpy as np
 
-
-# def generate_data_in():
-#     """
-#     Generate random value as input
-#     """
-#     for i in range(k):
-#         #data_in.append(random.randint(0,1))
-#         if(i < k/2):
-#             data_in.append(1)
-#         else:
-#             data_in.append(0)
-
-# def generate_frozen_bits():
-#     """Generate random frozen bits as input.
-
-#     Returns:
-#         array: The frozen bits.
-#     """
-#     frozen_bits = []
-#     for i in range(n):
-#         if(i < k):
-#             frozen_bits.append(0)
-#         else:
-#             frozen_bits.append(1)
-
-#     return frozen_bits
-    
-
-def add_frozen_in_data(data_in, frozen_bits):
+def __add_frozen_in_data(data_in, frozen_bits):
     """The frozen bits contains the position where zeros will be add to the data
     in.
     This function add the zeros at the right position in the data in
@@ -54,7 +26,7 @@ def add_frozen_in_data(data_in, frozen_bits):
     return out
 
 
-def generate_kernel_matrix(N):
+def __generate_kernel_matrix(N):
     """Create the kernel matrix for the polar encoder.
 
     Ex for N = 4.
@@ -88,9 +60,55 @@ def generate_kernel_matrix(N):
 
     return matrix
 
-def encode(data_in, frozen_bits):
+reliable_channel_file = "text_files/reliable_channel_1024.txt"
+def __generate_frozen_bits(k, N):
+    """Generate the frozen bits for the polar encoder from the reliable channels in the text file.
+
+    Args:
+        k (_type_): number of information bits
+        N (_type_): number of encoded bits
     """
+
+    # read the file that contains the reliable channels
+    file = open(reliable_channel_file, "r")
+    header1 = file.readline()
+    header2 = file.readline()
+    channels = file.readline()
+
+    # convert the string to an array
+    channel_arr = channels.split(" ")
+
+    # remove the last element of the array (it's a \n)
+    channel_arr.pop()
+
+    # convert the string to int
+    channel_arr = [int(i) for i in channel_arr]
+
+    # Put zero in the frozen bits array for the first k reliable channels
+    # also don't consider channel > N
+    frozen_bits = [1]*N
+    index_k = 0
+    for i in range(len(channel_arr)):
+        if channel_arr[i] < N:
+            frozen_bits[channel_arr[i]] = 0
+            index_k += 1
+            if index_k == k:
+                break
+
+    return frozen_bits
+
+
+def encode(data_in, frozen_bits = [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0]):
+    """
+    Encode the data with the polar encoder.
     The data is multiply with each row in the matrix.
+
+    Args:
+        data_in (int[]): The data that we want to encode
+        frozen_bits (int[]): The frozen bits. Defaults to [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0] for k = 8 and N = 16
+
+    Returns:
+        array: The data that is now encoded
 
     Ex: 
     data =   [0, 1]
@@ -99,14 +117,6 @@ def encode(data_in, frozen_bits):
 
     data_out = [(data(0) * matrix[0,0] + data(1)*matrix[0,1]), (data(0) * matrix[1,0] + data(1)*matrix[1,1]))
              = [0*1+1*0, 0*1+1*1] = [0, 1]
-    
-
-    Args:
-        data_in (array): The data that we want to encode
-        N: The size of the encoded data
-
-    Returns:
-        array: The data that is now encoded
     """
 
     dimension_bits = len(data_in)
@@ -115,10 +125,12 @@ def encode(data_in, frozen_bits):
     if(dimension_bits >= N):
         return
     
-    kernel_matrix = generate_kernel_matrix(N)
-    data_to_encode = add_frozen_in_data(data_in, frozen_bits)
+    kernel_matrix = __generate_kernel_matrix(N)
+    data_to_encode = __add_frozen_in_data(data_in, frozen_bits)
+
     #convert data to encode for bitwise operation
     data_to_encode = np.array(data_to_encode, dtype=int)
+    
     # reverse data to encode
     data_to_encode = data_to_encode[::-1]
 
@@ -136,15 +148,34 @@ def encode(data_in, frozen_bits):
 
     return encoded_bits
 
-if __name__ == '__main__':
+def encode_char(data_in):
+    """Function that encode the data from a char to a binary array
 
-    #verify that this works with the aff3ct    
+    Args:
+        data_in (_type_): char that we want to encode
+
+    Returns:
+        encoded_bits (array of bits[int]): the encoded data
+    """
+    # convert the char to binary array of 8 bits
+    data_in = [int(x) for x in list('{0:08b}'.format(ord(data_in)))]
+    
+    # encode the data
+    encoded_bits = encode(data_in)
+
+    return encoded_bits
+
+if __name__ == '__main__':
+    # test
     # k=4
     # n=8
 
-    data_in = [1,1,0,0]
-    frozen_bits = [1,1,1,0,1,0,0,0] # default value for k = 4 and N = 8
+    # data_in = [1,1,0,0]
+    # frozen_bits = [1,1,1,0,1,0,0,0] # default value for k = 4 and N = 8
 
-    encoded_bits = encode(data_in, frozen_bits)
+    # encoded_bits = encode(data_in, frozen_bits)
 
-    print(encoded_bits)
+    # print(encoded_bits)
+
+    frozen_bits = __generate_frozen_bits(1, 128)
+    print(frozen_bits)
