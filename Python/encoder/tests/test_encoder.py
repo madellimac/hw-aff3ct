@@ -1,7 +1,10 @@
+"""    Compare the output of the encoder with the output of the aff3ct encoder
+"""
+aff3ct_path = "/mnt/d/OneDrive/Etude/Enseirb/Projet S8/py_aff3ct"
 
 import sys
-#sys.path.insert(0, '/./../py_aff3ct/build/lib')
-sys.path.insert(0, '/mnt/d/OneDrive/Etude/Enseirb/Projet S8/py_aff3ct/build/lib')
+
+sys.path.insert(0, aff3ct_path)
 sys.path.insert(0, '../')
 import numpy as np
 import time
