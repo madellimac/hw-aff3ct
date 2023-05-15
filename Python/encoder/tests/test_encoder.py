@@ -1,6 +1,6 @@
 """    Compare the output of the encoder with the output of the aff3ct encoder
 """
-aff3ct_path = "/mnt/d/OneDrive/Etude/Enseirb/Projet S8/py_aff3ct"
+aff3ct_path = "/mnt/d/OneDrive/Etude/Enseirb/Projet S8/py_aff3ct/build/lib"
 
 import sys
 
