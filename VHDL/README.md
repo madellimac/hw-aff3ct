@@ -15,7 +15,17 @@ Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits no
               **Vector_Frozen** :    [ 0 1 0 0 1 0 0 0 ]    |   Ici Les positions 3 et 6 sont gelées.
               **positions** :        [ 7 6 5 4 3 2 1 0 ]    |   En effet, les 1 indiquent qu'à cette position, il y a un bit gelé (donc 0).      
                                                                          
-  - **Encodage** : L'encodage se réalise à l'aide 
+  - **Encodage** : L'encodage se réalise à l'aide d'une matrice Kernel de taille NxN = 8x8 ici : 
+
+                                                       | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+                                                       |---|---|---|---|---|---|---|---| 
+                                                       | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 
+                                                       | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 
+                                                       | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
+                                                       | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 |
+                                                       | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 |
+                                                       | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 |
+                                                       | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 
 2. **Encodage parallèle générique** :
 
