@@ -17,7 +17,7 @@ Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits no
                                                                          
   - **Encodage** : L'encodage se réalise à l'aide d'une matrice Kernel de taille NxN = 8x8 ici : 
 
-                                                       | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+                                                       | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |  
                                                        |---|---|---|---|---|---|---|---| 
                                                        | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 
                                                        | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 
@@ -26,7 +26,12 @@ Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits no
                                                        | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 |
                                                        | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 |
                                                        | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
-
+                                                       
+   -> En réalité, utiliser cette matrice revient réaliser cette opération 8 d'affilé :
+                                  **registre <= registre xor (data_in & registre(N-1 downto 1))**
+                                  
+    On obtient à la fin notre code sur N=8 bits. 
+    
 2. **Encodage parallèle générique** :
 
 ---
