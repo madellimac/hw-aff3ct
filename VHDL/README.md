@@ -6,7 +6,7 @@ Le FPGA est utilisé pour faire l'encodage polaire. Pour ce faire il recoit en e
 ## Encodage polaire
 Celui-ci contient deux architecture pour faire le même encodage.
 
-1. **Encodage série** : 
+1. **Encodage série Fp** : 
 
 Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits non gelés égale à K=6. On reçoit le code bit par bit par l'UART:
   - **Registre à décalage** : Un registre à décalage de 6 bits se rempli pour accueillir les 6 bits du mot de code.
@@ -21,19 +21,27 @@ Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits no
 |---|---|---|---|---|---|---|---|                                                        
 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |                                                        
 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |                                                        
-| 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |                                                       
+| 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |     = F8                                                  
 | 1 | 0 | 1 | 0 | 1 | 0 | 0 | 0 |                                                       
 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 |                                                       
 | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 0 |                                                       
 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |                                                       
                                                        
                                                        
-   -> En réalité, utiliser cette matrice revient réaliser cette opération 8 d'affilé :
+   -> En réalité, utiliser cette matrice revient réaliser cette opération 8 fois d'affilées :
                                   **registre <= registre xor (data_in & registre(N-1 downto 1))**
                                   
     On obtient à la fin notre code sur N=8 bits. 
     
 2. **Encodage parallèle générique** :
+
+L'encodage parallèle consiste à diviser le mot de code que l'on veut coder pour les traiter séparemment dans des encodeurs série Fp puis
+de faire passer les codes obtenus dans des accumulateurs rebouclés avec des xor pour obtenir notre mot de code sur 8 bits.
+
+Reprenons notre exemple précédent avec cette fois-ci un encodage qui utilise 2 encodeurs F4 série. 
+Donc N=8, P=4 et K=3 (nb de bits non gelés dans chaque encodeur série)
+
+(/images/schéma parallele codeur.PNG)
 
 ---
 
