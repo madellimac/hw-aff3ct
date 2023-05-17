@@ -46,7 +46,7 @@ Donc N=8, P=4 et K=3 (nombre de bits non gelés dans chaque encodeur série)
 
 -**Exemple** :
 Supposons que l'on veuille code, avec N = 8, P = 4 et K = 3, le mot :
-[ 1 | 0 | 1 | 1 | 0 | 1 ] 
+[ 1 0 1 1 0 1 ] 
 
 
 
