@@ -40,12 +40,13 @@ L'encodage parallèle consiste à diviser le mot de code que l'on veut coder pou
 de faire passer les codes obtenus dans des accumulateurs rebouclés avec des xor pour obtenir notre mot de code sur 8 bits.
 
 Reprenons notre exemple précédent avec cette fois-ci un encodage qui utilise 2 encodeurs F4 série. 
-Donc N=8, P=4 et K=3 (nb de bits non gelés dans chaque encodeur série)
+Donc N=8, P=4 et K=3 (nombre de bits non gelés dans chaque encodeur série)
 
 ![Encodage parallèle](/images/encodeur_para.PNG)
 
 -**Exemple** :
-Supposons que l'on veuille coder le mot 
+Supposons que l'on veuille code, avec N = 8, P = 4 et K = 3, le mot :
+[ 1 | 0 | 1 | 1 | 0 | 1 ] 
 
 
 
@@ -54,7 +55,9 @@ Supposons que l'on veuille coder le mot
 Dans les faits, l'encodeur parallèle fonctionne aussi en mode série (N=P). Dans ce cas, l'accumulateur sera juste un réseau de bascule et le module
 Fp sera celui décrit précédemment pour P=N. 
 Cependant dans l'état actuel, il n'est capable que de générer un seul module Fp. Donc si l'on veut coder un vecteur de taille N = 8 pour P = 4,
-il faut envoyer les 2 bouts de mot l'un après l'autre dans le module Fp. (Bien entendu, c'est une perte de temps considérable).
+il faut envoyer les 2 bouts de mot l'un après l'autre dans le module Fp. (Bien entendu, c'est une perte de temps).
+
+Pour pouvoir générer 
 
 
 ---
