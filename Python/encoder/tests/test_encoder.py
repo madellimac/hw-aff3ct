@@ -24,6 +24,18 @@ import frozen_bits_generator as frozen
 
 # Create 
 def test_encoder_pyaff3ct(bits, K, N):
+    """
+    Compare the encoded value of the aff3ct encoder and
+    this encoder.
+
+    Print the error if any
+
+    Args:
+        bits (array bits (int)): the array of bits to encode
+        K (int): the number of bits to encode  
+        N (int): the number of encoded bits
+    """
+
     # get the frozen bits depending on k and N
     frozen_bits = frozen.get_frozen_bits(K, N)
     
@@ -35,18 +47,27 @@ def test_encoder_pyaff3ct(bits, K, N):
     enc['encode'].exec()
 
     # My encoder
-    encoded_bits = my_encoder.encode(bits, frozen_bits)
-
+    my_enc = my_encoder.polar_encoder(frozen_bits)
+    encoded_bits = my_enc.encode(bits) 
     # compare the output of the two encoder
     for i in range(N):
         if(enc["encode::X_N"][0][i] != encoded_bits[i]):
-            print("error")
+            print("error in the encoder")
             print("aff3ct: " + enc["encode::X_N"][0])
             print("My encoder: " + encoded_bits)
+            sys.exit()
             break  
 
 # function to test the char encoder
 def test_encoder_char(char:chr):
+    """
+    Compare the encoded value of the aff3ct encoder and
+    this encoder for a char (8 bits)
+
+    Args:
+        char (chr): the 8 bits to encode
+    """
+
     K=8
     N=16
     # get the frozen bits depending on k and N
@@ -63,17 +84,27 @@ def test_encoder_char(char:chr):
     enc['encode'].exec()
 
     # My encoder
-    encoded_bits = my_encoder.encode_char(char)
+    my_enc = my_encoder.polar_encoder(frozen_bits)
+    encoded_bits = my_enc.encode_char(char)
 
     # compare the output of the two encoder
     for i in range(N):
         if(enc["encode::X_N"][0][i] != encoded_bits[i]):
-            print("error")
+            print("error in the char encoder")
             print("aff3ct: " + enc["encode::X_N"][0])
             print("My encoder: " + encoded_bits)
+            sys.exit()
             break  
 
 def launch_test():
+    """
+    Launch the tests for k=8 and N=16. For each value
+    possible for k (k=8 --> 256), it encodes the data with
+    this encoder and compares it with the aff3ct encoder.
+    
+    Prints the error if any. Otherwise, display nothing 
+    """
+
     # test all posible input to compare the two encoder
     K=8
     N=16
@@ -93,7 +124,12 @@ def launch_test():
     test_encoder_char('g')
 
 
-def encode_char_to_file():    
+def encode_char_to_file():   
+    """
+    Generate all char (256 character) in the polar encoded format
+    and save them in the file /text_file/encoded_char.txt
+    """
+
     # open the file
     file = open("../text_files/encoded_char.txt", "w")
 
