@@ -27,7 +27,7 @@ use IEEE.numeric_std.all;
 entity UART_recv is
    Port ( clk    : in  STD_LOGIC;
           reset  : in  STD_LOGIC;
-          rx     : in  STD_LOGIC;
+          RX     : in  STD_LOGIC;
           dat    : out STD_LOGIC_VECTOR (7 downto 0);
           dat_en : out STD_LOGIC);
 end UART_recv;
@@ -67,7 +67,7 @@ begin
 process(clk)
 begin
 	if clk'event and clk='1' then
-		rxi <= rx;
+		rxi <= RX;
 	end if;
 end process;
 
@@ -108,7 +108,7 @@ begin
                                                       else cnt <= cnt - 1;          end if;
             when wait_next_bit   => if cnt = 0        then cnt <= quarter;                      -- transition, we prepare the next waiting time
                                                       else cnt <= cnt - 1;          end if;
-            when bit_sample      => if ref_bit /= rxi then cnt <= quarter;                -- if bit change, we restart the counter
+            when bit_sample      => if ref_bit /= rxi then cnt <= quarter;                      -- if bit change, we restart the counter
                                                       else cnt <= cnt - 1;          end if;
             when bit_received    => if nbbits <  8    then cnt <= three_quarters;
                                  elsif ref_bit = '0'  then cnt <= full;

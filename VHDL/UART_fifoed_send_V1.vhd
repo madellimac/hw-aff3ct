@@ -20,14 +20,14 @@ entity UART_fifoed_send is
               fifo_almost           : integer := 4090;
               drop_oldest_when_full : boolean := False;
               asynch_fifo_full      : boolean := True;
-              baudrate              : integer := 921600;   -- [bps]
+              baudrate              : integer := 120000;   -- [bps]
               clock_frequency       : integer := 100000000 -- [Hz]
     );
     Port (
         clk_100MHz : in  STD_LOGIC;
         reset      : in  STD_LOGIC;
         dat_en     : in  STD_LOGIC;
-        dat        : in  STD_LOGIC_VECTOR (7 downto 0);
+        dat2        : in  STD_LOGIC_VECTOR (7 downto 0);
         TX         : out STD_LOGIC;
         fifo_empty : out STD_LOGIC;
         fifo_afull : out STD_LOGIC;
@@ -166,7 +166,7 @@ begin
             write_index <= write_index + 1;
          end if;
          -- by the way, we also write data in array :)
-         FIFO(write_index) <= dat;
+         FIFO(write_index) <= dat2;
       end if;
    end if;
 end process;
