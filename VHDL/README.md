@@ -44,12 +44,6 @@ Donc N=8, P=4 et K=3 (nombre de bits non gelés dans chaque encodeur série)
 
 ![Encodage parallèle](/images/encodeur_para.PNG)
 
--**Exemple** :
-Supposons que l'on veuille code, avec N = 8, P = 4 et K = 3, le mot :
-[ 1 0 1 1 1 1 ] 
-avec un Vector_Frozen : [ 0 1 0 0 ]
-
-
 
 3. **Application**
 
@@ -58,7 +52,22 @@ Fp sera celui décrit précédemment pour P=N.
 Cependant dans l'état actuel, il n'est capable que de générer un seul module Fp. Donc si l'on veut coder un vecteur de taille N = 8 pour P = 4,
 il faut envoyer les 2 bouts de mot l'un après l'autre dans le module Fp. (Bien entendu, c'est une perte de temps).
 
-Pour pouvoir générer 
+**Exemple d'application test bench** :
+
+Nous voulons coder (0011 1001) avec Frozen_bits = (0100). N=8, K=3 et P = 4.
+Pour simuler le codage à l'aide du test bench, il faut dans le fichier test bench:
+  -Affecter les valeurs constantes **cnst_NB_bits_N ; cnst_NB_bits_P; cnst_NB_bits_k; cnst_Nb_sorties**
+  -Effectuer un **reset** global au début.
+  -Affecter une valeur à **sig_Vector_Frozen**. Ici "0100"
+  -Envoyer les bits de tel sorte que le **paquet de poid fort soit en envoyé en premier** (ici 0011), avec ses bits de poids faible en premier (ici 1 puis 1 puis 0 puis 0).
+  -Entre le premier bit envoyé de chaque paquet, il faut qu'il y est un écart temporel d'au moins :
+  **(N+K+1)*Tclk"** (ici 80 ns)
+  
+Cet exemple se trouve déjà dans le test bench.
+
+-**Remarque** : 
+
+Actuellement, il faut **(N+K+3)*Tclk**ns pour coder 1 paquet P (ici 100ns) soit **(N/P)*(N+K+3)*Tclk** au total (ici 200ns).
 
 
 ---
