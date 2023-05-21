@@ -33,8 +33,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 
 entity Accumulateur_final is
-      generic(Nb_bits_N : integer :=8;
-              P : integer := 4);
+      generic(Nb_bits_N : integer;
+              P : integer);
       port(
       clk : in std_logic;
       rst : in std_logic;
@@ -47,7 +47,7 @@ end Accumulateur_final;
 architecture Behavioral of Accumulateur_final is
 
 signal compteur_1 : integer :=0 ;
-signal nb_etage : integer :=(Nb_bits_N / P);
+constant nb_etage : integer :=(Nb_bits_N / P);
 
 type s_array is array(0 to nb_etage) of std_logic_vector(P-1 downto 0);
 

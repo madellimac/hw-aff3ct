@@ -32,8 +32,8 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity Comparateur is
-  generic ( Nb_bits_K : integer :=2;
-            P : integer :=4);
+  generic ( Nb_bits_K : integer;
+            P : integer);
   Port (clk : in std_logic;
         rst : in std_logic;
         vector_frozen: in std_logic_vector(P-1 downto 0);
@@ -66,7 +66,7 @@ begin
                     enable_out <= '1';
                     if (compteur_rang = P) then 
                         compteur_rang <= 0;
-                    elsif (Q(Compteur_rang) = '1') then --position 1 au bits de poid faible du vecteur frozen
+                    elsif (Q(P-1-Compteur_rang) = '1') then --position 1 au bits de poid faible du vecteur frozen
                             output <= '0';
                             compteur_rang <= compteur_rang + 1;
                     elsif (compteur = Nb_bits_K) then 
@@ -86,6 +86,7 @@ begin
                  end if;
              end if;
         end process;        
+
 
 
 end Behavioral;

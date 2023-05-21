@@ -38,9 +38,9 @@ architecture Behavioral_tb_top_level_parallele of tb_top_level_parallele is
 
 component Top_level_parallele is 
       generic (
-      Nb_bits_N : integer;
-      Nb_bits_K : integer;
-      P : integer);
+      Nb_bits_N : integer; --Nb_bits total
+      Nb_bits_K : integer; --Nb de bits pas gelés du paquet
+      P : integer); --Nb de bits dans un paquet
       Port (
       clk : in std_logic;
       rst : in std_logic;
@@ -86,6 +86,8 @@ begin
         Begin
         
 --test pour N=8 et K = 1et P = 4
+--Je veux coder 0011 1001. avec frozen bit : ( 0100 ) (rang 2 sur 3 gelé).
+--J'eenvoie donc 011 puis 101
 
             sig_rst<='1';
             wait for 20 ns;
@@ -96,17 +98,17 @@ begin
             sig_data_in <= '1';
             sig_en_in <= '1';
             wait for 10 ns;
-            sig_data_in <='0';   
-            wait for 10 ns;
             sig_data_in <='1';   
+            wait for 10 ns;
+            sig_data_in <='0';   
             wait for 10 ns;
             
             sig_en_in <= '0';
-            wait for 40 ns; --wait for P-(P-K)+1 avec K nb de bits pas gelés.
+            wait for 50 ns; --wait for K avec K nb de bits pas gelés.
             sig_en_in <= '1';
-            sig_data_in <='0';   
+            sig_data_in <='1';   
             wait for 10 ns;
-            sig_data_in <='1'; 
+            sig_data_in <='0'; 
             --on attend 2P-K
             sig_vector_frozen <= "0100";
             wait for 10 ns;
@@ -117,34 +119,6 @@ begin
             sig_data_in <= '0';
             sig_en_in <= '0'; 
              
-
---test pour N=8 et K = 1 et P = 4    
---J'envoie (111110) donc c'est si j'allais coder (011111)
---Frozen : (1100) puis (0000) 
---Donc on va coder (00011111)
---En sortie de P1 : D'abord : (0001) Puis (1111)     
---En sortie de P2 : (11100001)
---              sig_data_in <= '0';
---              sig_en_in <= '1'; 
---              sig_vector_frozen <= "0000"; 
---              wait for 10 ns;
---              sig_data_in <= '1'; 
---              wait for 10 ns;
---              sig_data_in <= '1';
---              wait for 20 ns;
-              
---              sig_vector_frozen <= "1100"; 
---              sig_data_in <= '1';
---              wait for 10 ns; 
---              sig_data_in <= '1';
---              wait for 10 ns;
---              sig_data_in <= '1';
---              wait for 20 ns;
-              
---              wait for 10 ns;
---              sig_data_in <= '0';
---              sig_en_in <= '0';
-
             wait;
         end process;
 
