@@ -60,7 +60,7 @@ Pour simuler le codage à l'aide du test bench, il faut dans le fichier test ben
   - Effectuer un **reset** global au début.
   - Affecter une valeur à **sig_Vector_Frozen**. Ici "0100"
   - Envoyer les bits de tel sorte que le **paquet de poid fort soit en envoyé en premier** (ici 0011), avec ses bits de poids faible en premier (ici 1 puis 1 puis 0 puis 0).
-  - Entre le premier bit envoyé de chaque paquet, il faut qu'il y est un écart temporel d'au moins : **(N+K+1)*Tclk"** (ici 80 ns)
+  - Entre le premier bit envoyé de chaque paquet, il faut qu'il y est un écart temporel d'au moins : **(N+K+1)*Tclk** (ici 80 ns)
   
 Cet exemple se trouve déjà dans le test bench.
 
