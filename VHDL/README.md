@@ -56,16 +56,16 @@ il faut envoyer les 2 bouts de mot l'un après l'autre dans le module Fp. (Bien 
 
 Nous voulons coder (0011 1001) avec Frozen_bits = (0100). N=8, K=3 et P = 4.
 Pour simuler le codage à l'aide du test bench, il faut dans le fichier test bench:
-  -Affecter les valeurs constantes **cnst_NB_bits_N ; cnst_NB_bits_P; cnst_NB_bits_k; cnst_Nb_sorties**
-  -Effectuer un **reset** global au début.
-  -Affecter une valeur à **sig_Vector_Frozen**. Ici "0100"
-  -Envoyer les bits de tel sorte que le **paquet de poid fort soit en envoyé en premier** (ici 0011), avec ses bits de poids faible en premier (ici 1 puis 1 puis 0 puis 0).
-  -Entre le premier bit envoyé de chaque paquet, il faut qu'il y est un écart temporel d'au moins :
+  - Affecter les valeurs constantes **cnst_NB_bits_N ; cnst_NB_bits_P; cnst_NB_bits_k; cnst_Nb_sorties**
+  - Effectuer un **reset** global au début.
+  - Affecter une valeur à **sig_Vector_Frozen**. Ici "0100"
+  - Envoyer les bits de tel sorte que le **paquet de poid fort soit en envoyé en premier** (ici 0011), avec ses bits de poids faible en premier (ici 1 puis 1 puis 0 puis 0).
+  - Entre le premier bit envoyé de chaque paquet, il faut qu'il y est un écart temporel d'au moins :
   **(N+K+1)*Tclk"** (ici 80 ns)
   
 Cet exemple se trouve déjà dans le test bench.
 
--**Remarque** : 
+- **Remarque** : 
 
 Actuellement, il faut **(N+K+3)*Tclk**ns pour coder 1 paquet P (ici 100ns) soit **(N/P)*(N+K+3)*Tclk** au total (ici 200ns).
 
