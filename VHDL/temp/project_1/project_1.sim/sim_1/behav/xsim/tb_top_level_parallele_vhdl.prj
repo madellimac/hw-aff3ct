@@ -1,0 +1,13 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/Accumulateur_final.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/Calcul_registre.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/Comparateur.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/Top_level.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/Top_lvl_P1.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/Top_lvl_P2.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sources_1/new/registre_a_decalage.vhd" \
+"../../../../../../Encodeur_para_final.srcs/sim_1/new/tb_top_lvl.vhd" \
+
+# Do not sort compile order
+nosort

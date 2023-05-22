@@ -51,9 +51,9 @@ component Top_level_parallele is
       data_out : inout std_logic_vector(Nb_bits_N -1 downto 0));
 end component;
   
-constant cnst_NB_bits_N : integer :=8;
-constant cnst_NB_bits_P : integer :=4;
-constant cnst_NB_bits_k : integer :=3; --K est le nombre de bits nin gelés dans P
+constant cnst_NB_bits_N : integer :=4;
+constant cnst_NB_bits_P : integer :=2;
+constant cnst_NB_bits_k : integer :=1; --K est le nombre de bits nin gelés dans P
 
 
 signal sig_clk : std_logic :='0';  
@@ -85,37 +85,58 @@ begin
     process
         Begin
         
---test pour N=8 et K = 1et P = 4
+--test pour N=16 et K = 4 et P = 8
+--0100 pour 10
 
             sig_rst<='1';
             wait for 20 ns;
             sig_rst <= '0';
             wait for 20 ns;
             
-            sig_vector_frozen <= "0100";
-            sig_data_in <= '1';
+            sig_vector_frozen <= "10";
+            sig_data_in <= '0';
             sig_en_in <= '1';
             wait for 10 ns;
-            sig_data_in <='0';   
-            wait for 10 ns;
-            sig_data_in <='1';   
+            sig_en_in <= '0';
+            wait for 40 ns; 
+            sig_en_in <= '1';
+            sig_data_in <='1';               
             wait for 10 ns;
             
-            sig_en_in <= '0';
-            wait for 40 ns; --wait for P-(P-K)+1 avec K nb de bits pas gelés.
-            sig_en_in <= '1';
-            sig_data_in <='0';   
-            wait for 10 ns;
-            sig_data_in <='1'; 
-            --on attend 2P-K
-            sig_vector_frozen <= "0100";
-            wait for 10 ns;
-            sig_data_in <='1';   
-            wait for 10 ns;
-
-
             sig_data_in <= '0';
             sig_en_in <= '0'; 
+             
+--test pour N=8 et K = 1et P = 4
+
+--            sig_rst<='1';
+--            wait for 20 ns;
+--            sig_rst <= '0';
+--            wait for 20 ns;
+            
+--            sig_vector_frozen <= "0010";
+--            sig_data_in <= '1';
+--            sig_en_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <='1';   
+--            wait for 10 ns;
+--            sig_data_in <='0';   
+--            wait for 10 ns;
+            
+--            sig_en_in <= '0';
+--            wait for 50 ns; 
+--            sig_en_in <= '1';
+--            sig_data_in <='1';   
+--            wait for 10 ns;
+--            sig_data_in <='0'; 
+           
+--            sig_vector_frozen <= "0010";
+--            wait for 10 ns;
+--            sig_data_in <='1';   
+--            wait for 10 ns;
+
+
+--            sig_data_in <= '0';
+--            sig_en_in <= '0'; 
              
 
 --test pour N=8 et K = 1 et P = 4    

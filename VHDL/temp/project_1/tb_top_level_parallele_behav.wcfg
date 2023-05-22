@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_top_level_parallele_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="tb_top_level_parallele" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="358.375 ns"></ZoomEndTime>
+      <Cursor1Time time="125.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="214"></NameColumnWidth>
+      <ValueColumnWidth column_width="139"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="14" />
+   <wvobject fp_name="/tb_top_level_parallele/sig_clk" type="logic">
+      <obj_property name="ElementShortName">sig_clk</obj_property>
+      <obj_property name="ObjectShortName">sig_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/sig_rst" type="logic">
+      <obj_property name="ElementShortName">sig_rst</obj_property>
+      <obj_property name="ObjectShortName">sig_rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/sig_en_in" type="logic">
+      <obj_property name="ElementShortName">sig_en_in</obj_property>
+      <obj_property name="ObjectShortName">sig_en_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/sig_vector_frozen" type="array">
+      <obj_property name="ElementShortName">sig_vector_frozen[3:0]</obj_property>
+      <obj_property name="ObjectShortName">sig_vector_frozen[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/sig_data_in" type="logic">
+      <obj_property name="ElementShortName">sig_data_in</obj_property>
+      <obj_property name="ObjectShortName">sig_data_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/sig_data_out" type="array">
+      <obj_property name="ElementShortName">sig_data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sig_data_out[7:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/sig_en_out" type="logic">
+      <obj_property name="ElementShortName">sig_en_out</obj_property>
+      <obj_property name="ObjectShortName">sig_en_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/cnst_NB_bits_N" type="other">
+      <obj_property name="ElementShortName">cnst_NB_bits_N</obj_property>
+      <obj_property name="ObjectShortName">cnst_NB_bits_N</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/cnst_NB_bits_P" type="other">
+      <obj_property name="ElementShortName">cnst_NB_bits_P</obj_property>
+      <obj_property name="ObjectShortName">cnst_NB_bits_P</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/cnst_NB_bits_k" type="other">
+      <obj_property name="ElementShortName">cnst_NB_bits_k</obj_property>
+      <obj_property name="ObjectShortName">cnst_NB_bits_k</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/tb_top_level_codeur/top_lvl_p1/inst_registre_comparateur/enable_registre_in" type="logic">
+      <obj_property name="ElementShortName">enable_registre_in</obj_property>
+      <obj_property name="ObjectShortName">enable_registre_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/tb_top_level_codeur/top_lvl_p1/inst_registre_comparateur/registre_in" type="array">
+      <obj_property name="ElementShortName">registre_in[2:0]</obj_property>
+      <obj_property name="ObjectShortName">registre_in[2:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/tb_top_level_codeur/top_lvl_p1/inst_registre_comparateur/output" type="logic">
+      <obj_property name="ElementShortName">output</obj_property>
+      <obj_property name="ObjectShortName">output</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_top_level_parallele/tb_top_level_codeur/top_lvl_p1/inst_registre_comparateur/enable_out" type="logic">
+      <obj_property name="ElementShortName">enable_out</obj_property>
+      <obj_property name="ObjectShortName">enable_out</obj_property>
+   </wvobject>
+</wave_config>

@@ -68,7 +68,7 @@ pr_calcul : process(clk,rst)
                         en_out <= '1';
                         compteur_en_out <= 0;
                         l : for i in 0 to P-1 loop
-                            data_out(i) <= registre(P - 1-i);
+                            data_out(i) <= registre(i);
                         end loop l;
                      else 
                         en_out <= '0';
