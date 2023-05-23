@@ -35,8 +35,8 @@ use IEEE.NUMERIC_STD.ALL;
 --On suppose que le LSB arrive en premier 
 --A la fin c'est le LSB d'entrée qui sera en MSB du registre
 entity registre_a_decalage is
-      generic ( Nb_bits_K : integer :=2;
-                P : integer :=4);
+      generic ( Nb_bits_K : integer;
+                P : integer);
       Port (clk : in STD_LOGIC;
             enable : in std_logic;
             rst : in std_logic;

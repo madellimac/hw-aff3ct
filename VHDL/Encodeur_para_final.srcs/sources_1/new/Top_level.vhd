@@ -38,8 +38,8 @@ use IEEE.NUMERIC_STD.ALL;
 
 --Vector frozen pas encore générique.
 entity top_level_codeur_p2 is
-      generic (Nb_bits_N : integer :=4;
-               P : integer :=2);
+      generic (Nb_bits_N : integer :=8;
+               P : integer :=4);
       Port (
       clk : in std_logic;
       rst : in std_logic;
@@ -52,8 +52,8 @@ end top_level_codeur_p2;
 architecture Behavioral of top_level_codeur_p2 is
 
 component Accumulateur_final is
-      generic(Nb_bits_N : integer :=4;
-              P : integer := 2);
+      generic(Nb_bits_N : integer:=8;
+              P : integer :=4);
       port(
       clk : in std_logic;
       rst : in std_logic;

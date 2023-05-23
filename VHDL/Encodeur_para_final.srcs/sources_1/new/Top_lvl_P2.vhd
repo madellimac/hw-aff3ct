@@ -32,9 +32,9 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity Top_level_parallele is
-      generic (Nb_bits_N : integer;
-               Nb_bits_K : integer;
-               P : integer);
+      generic (Nb_bits_N : integer := 8;
+               Nb_bits_K : integer := 3;
+               P : integer := 4);
       Port (
       clk : in std_logic;
       rst : in std_logic;
@@ -48,8 +48,8 @@ end Top_level_parallele;
 architecture Behavioral of Top_level_parallele is
 
 component top_level_codeur is
-      generic (P : integer :=10;
-               Nb_bits_K : integer :=6);
+      generic (P : integer :=4;
+               Nb_bits_K : integer:=3);
       Port (
       clk : in std_logic;
       rst : in std_logic;
@@ -61,8 +61,8 @@ component top_level_codeur is
 end component;
 
 component top_level_codeur_p2 is
-      generic (Nb_bits_N : integer :=4;
-               P : integer :=2);
+      generic (Nb_bits_N : integer :=8;
+               P : integer :=4);
       Port (
       clk : in std_logic;
       rst : in std_logic;
