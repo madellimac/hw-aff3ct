@@ -8,7 +8,7 @@ Celui-ci contient deux architecture pour faire le même encodage.
 
 1. **Encodage série Fp** : 
 
-![encodeur_serie](/images/encodeur_para.PNG)
+![encodeur_serie](/images/encodeur_serie.PNG)
 
 Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits non gelés égale à K=6. On reçoit le code bit par bit par l'UART:
   - **Registre à décalage** : Un registre à décalage de 6 bits se rempli pour accueillir les 6 bits du mot de code.
