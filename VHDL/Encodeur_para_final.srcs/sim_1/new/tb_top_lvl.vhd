@@ -38,9 +38,9 @@ architecture Behavioral_tb_top_level_parallele of tb_top_level_parallele is
 
 component Top_level_parallele is 
       generic (
-      Nb_bits_N : integer; --Nb_bits total
-      Nb_bits_K : integer; --Nb de bits pas gelés du paquet
-      P : integer); --Nb de bits dans un paquet
+      Nb_bits_N : integer;
+      Nb_bits_K : integer;
+      P : integer);
       Port (
       clk : in std_logic;
       rst : in std_logic;
@@ -51,7 +51,7 @@ component Top_level_parallele is
       data_out : inout std_logic_vector(Nb_bits_N -1 downto 0));
 end component;
   
-constant cnst_NB_bits_N : integer :=8;
+constant cnst_NB_bits_N : integer :=16;
 constant cnst_NB_bits_P : integer :=4;
 constant cnst_NB_bits_k : integer :=3; --K est le nombre de bits nin gelés dans P
 
@@ -84,41 +84,146 @@ begin
 
     process
         Begin
-        
---test pour N=8 et K = 1et P = 4
---Je veux coder 0011 1001. avec frozen bit : ( 0100 ) (rang 2 sur 3 gelé).
---J'eenvoie donc 011 puis 101
+       
 
             sig_rst<='1';
             wait for 20 ns;
             sig_rst <= '0';
-            wait for 20 ns;
-            
-            sig_vector_frozen <= "0100";
-            sig_data_in <= '1';
-            sig_en_in <= '1';
-            wait for 10 ns;
-            sig_data_in <='1';   
-            wait for 10 ns;
-            sig_data_in <='0';   
-            wait for 10 ns;
-            
-            sig_en_in <= '0';
-            wait for 50 ns; --wait for K avec K nb de bits pas gelés.
-            sig_en_in <= '1';
-            sig_data_in <='1';   
-            wait for 10 ns;
-            sig_data_in <='0'; 
-            --on attend 2P-K
-            sig_vector_frozen <= "0100";
-            wait for 10 ns;
-            sig_data_in <='1';   
-            wait for 10 ns;
+            wait for 20 ns;          
 
 
-            sig_data_in <= '0';
-            sig_en_in <= '0'; 
+
+--test pour N=16 et K = 6 et P = 8
+--10110010 00100111 donc j'envoie 111010 010111        
+--            sig_vector_frozen <= "01001000";
+--            sig_data_in <= '0';
+--            sig_en_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns; 
+--            sig_data_in <= '0';
+--            sig_en_in <= '0';
+--            wait for 90 ns; 
+            
+--            sig_en_in <= '1';
+--            sig_data_in <='1';               
+--            wait for 10 ns;
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+            
+--            sig_data_in <= '0';
+--            sig_en_in <= '0'; 
+            
+            
+            
+--test pour N=4 et K = 1 et P = 2
+--0100 pour 10         
+--            sig_vector_frozen <= "10"; --(1 premier bit, 0 deuxieme bit)
+--            sig_data_in <= '0';
+--            sig_en_in <= '1';
+--            wait for 10 ns;
+--            sig_en_in <= '0';
+--            wait for 30 ns; 
+--            sig_en_in <= '1';
+--            sig_data_in <='1';               
+--            wait for 10 ns;
+            
+--            sig_data_in <= '0';
+--            sig_en_in <= '0'; 
              
+--test pour N=8 et K = 1et P = 4
+            
+--            sig_vector_frozen <= "0010";
+--            sig_data_in <= '1';
+--            sig_en_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <='1';   
+--            wait for 10 ns;
+--            sig_data_in <='0';   
+--            wait for 10 ns;
+            
+--            sig_en_in <= '0';
+--            wait for 50 ns; 
+--            sig_en_in <= '1';
+--            sig_data_in <='1';   
+--            wait for 10 ns;
+--            sig_data_in <='0'; 
+           
+--            sig_vector_frozen <= "0010";
+--            wait for 10 ns;
+--            sig_data_in <='1';   
+--            wait for 10 ns;
+
+
+--            sig_data_in <= '0';
+--            sig_en_in <= '0'; 
+             
+--test pour N=16 et K = 3 et P = 4
+--1001 0010 1011 1010 donc j'envoie 101 010 111 110
+--marche pas ? 
+--            sig_vector_frozen <= "0100";
+--            sig_data_in <= '1';
+--            sig_en_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_en_in <= '0';
+--            sig_data_in <= '0';
+--            wait for 50 ns;
+            
+--            sig_en_in <= '1';
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_en_in <= '0';
+--            sig_data_in <= '0';
+--            wait for 50 ns;
+             
+--            sig_en_in <= '1'; 
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_en_in <= '0';
+--            sig_data_in <= '0';
+--            wait for 50 ns;
+            
+            
+--            sig_en_in <= '1';
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            wait for 10 ns;
+--            sig_data_in <= '1';
+--            wait for 10 ns;
+--            sig_data_in <= '0';
+--            sig_en_in <= '0';
+   
+
             wait;
         end process;
 
