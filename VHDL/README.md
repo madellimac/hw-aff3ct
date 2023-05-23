@@ -8,6 +8,8 @@ Celui-ci contient deux architecture pour faire le même encodage.
 
 1. **Encodage série Fp** : 
 
+![encodeur_serie](/images/encodeur_para.PNG)
+
 Supposons que l'on veuille encode un mot de taille N = 8 et de nombre de bits non gelés égale à K=6. On reçoit le code bit par bit par l'UART:
   - **Registre à décalage** : Un registre à décalage de 6 bits se rempli pour accueillir les 6 bits du mot de code.
   - **Comparateur** : Le comparateur permet d'introduire les bits gelés dans le mot de code. Pour cela il utilise un vecteur **Vector_Frozen** que l'utilisateur doit spécifier. Le vecteur est par exemple de cette forme : 
