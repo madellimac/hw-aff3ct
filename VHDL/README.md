@@ -44,7 +44,7 @@ de faire passer les codes obtenus dans des accumulateurs rebouclés avec des xor
 Reprenons notre exemple précédent avec cette fois-ci un encodage qui utilise 2 encodeurs F4 série. 
 Donc N=8, P=4 et K=3 (nombre de bits non gelés dans chaque encodeur série)
 
-![Encodage parallèle](/images/encodeur_para.PNG)
+![Encodage parallèle](/images/enco_para.PNG)
 
 
 3. **Application**
