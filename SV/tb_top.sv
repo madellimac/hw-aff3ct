@@ -26,10 +26,7 @@ module tb_top();
     logic        i_rst;
     logic        i_dv;
     
-    logic [7:0] o_data;
-    logic       o_dv;
-
-    counter uut (.*);
+    top uut (.*);
 
     initial begin
         i_clk = 0;
@@ -43,10 +40,6 @@ module tb_top();
         #30 i_dv = 1;
         #120 i_dv = 0;
         #160 $finish;
-    end
-
-    always @(posedge i_clk) begin
-        $display("Compteur : %b", o_data);
     end
 
 endmodule

@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 11/09/2023 11:51:42 AM
+// Create Date: 11/17/2023 04:44:14 PM
 // Design Name: 
 // Module Name: socket
 // Project Name: 
@@ -20,43 +20,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module socket #(parameter DATA_WIDTH = 8, DEPTH = 4)(
-    input logic i_clk,
-    input logic i_rst,
-    input logic [7:0] i_data,
-    input logic i_rd_en,
-    input logic i_wr_en,
-    output logic [7:0] o_data,
-    output logic o_full,
-    output logic o_empty);
+module socket # (parameter DATA_WITH = 8, DEPTH = 4)
+                (   input logic i_clk,
+                    input logic i_rst,
+                    input logic [7:0] i_data,
+                    input logic i_rd_en,
+                    input logic i_wr_en,
+                    input logic i_full,
+                    output logic o_rd_en,
+                    output logic [7:0 ]o_data,
+                    output logic o_dv,
+                    output logic o_full);
 
-    // Déclaration du tableau de stockage des données
-    logic [DATA_WIDTH-1:0] fifo [DEPTH-1:0];
+    logic empty_ctrl;
 
-    // Déclaration des pointeurs de lecture et écriture
-    logic [$clog2(DEPTH):0] wr_ptr, rd_ptr;
+    fifo #(.DATA_WITH(DATA_WITH), .DEPTH(DEPTH)) inst_fifo( .i_clk(i_clk),
+                                                                .i_rst(i_rst),
+                                                                .i_data(i_data),
+                                                                .i_rd_en(i_rd_en),
+                                                                .i_wr_en(i_wr_en),
+                                                                .o_data(o_data),
+                                                                .o_dv(o_dv),
+                                                                .o_full(o_full),
+                                                                .o_empty(empty_ctrl));
+    
+    socket_controler ctrl ( .i_clk(i_clk),
+                            .i_rst(i_rst), 
+                            .i_full(i_full),
+                            .i_empty(empty_ctrl),
+                            .o_rd_en(o_rd_en)); 
 
-    // Logique de contrôle
-    always_ff @(posedge i_clk or posedge i_rst) begin
-        if (i_rst) begin
-            wr_ptr <= 0;
-            rd_ptr <= 0;
-        end else begin
-            if (i_wr_en && !o_full) begin
-                fifo[wr_ptr] <= i_data;
-                wr_ptr <= wr_ptr + 1;
-            end
-
-            if (i_rd_en && !o_empty) begin
-                o_data <= fifo[rd_ptr];
-                rd_ptr <= rd_ptr + 1;
-            end
-        end
-    end
-
-    // Logique de statut
-    assign full = (wr_ptr == rd_ptr + DEPTH);
-    assign empty = (wr_ptr == rd_ptr);
-
-endmodule
-
+endmodule               
