@@ -23,13 +23,11 @@
 module fifo #(parameter DATA_WIDTH = 8, DEPTH = 4)(
     input logic i_clk,
     input logic i_rst,
-    input logic [7:0] i_data,
+    input logic [DATA_WIDTH-1:0] i_data,
     input logic i_rd_en,
     input logic i_wr_en,
-    input logic i_full,
     
-    output logic o_rd_en,
-    output logic [7:0] o_data,
+    output logic [DATA_WIDTH-1:0] o_data,
     output logic o_dv,
     output logic o_full,
     output logic o_empty);
@@ -39,17 +37,22 @@ module fifo #(parameter DATA_WIDTH = 8, DEPTH = 4)(
 
     // Déclaration des pointeurs de lecture et écriture
     logic [$clog2(DEPTH):0] wr_ptr, rd_ptr;
+    logic [$clog2(DEPTH):0] data_count;
 
     // Logique de contrôle
     always_ff @(posedge i_clk or posedge i_rst) begin
         if (i_rst) begin
             wr_ptr <= 0;
-            fifo[DEPTH-1:0] <= '{4{8'b0}};
-            //fifo[DEPTH-1:0] <= {8'b0};
+            fifo[DEPTH-1:0] <= '{DEPTH{0}};
         end else begin
             if (i_wr_en && !o_full) begin
-                fifo[wr_ptr] <= i_data;
-                wr_ptr <= wr_ptr + 1;
+                if(wr_ptr == DEPTH-1) begin
+                    fifo[wr_ptr] <= i_data;
+                    wr_ptr <= 0;
+                end else begin
+                    fifo[wr_ptr] <= i_data;
+                    wr_ptr <= wr_ptr + 1;
+                end             
             end           
         end
     end
@@ -58,20 +61,44 @@ module fifo #(parameter DATA_WIDTH = 8, DEPTH = 4)(
     always_ff @(posedge i_clk or posedge i_rst) begin
         if (i_rst) begin
             rd_ptr <= 0;
-            o_dv <= 1'b1;
+            o_dv <= 0;
+            o_data <= 0;
         end else begin
             if (i_rd_en && !o_empty) begin
+                if(rd_ptr == DEPTH-1) begin
+                    o_data <= fifo[rd_ptr];
+                    o_dv <= 1;
+                    rd_ptr <= 0;
+                end else begin
+                    o_data <= fifo[rd_ptr];
+                    o_dv <= 1;
+                    rd_ptr <= rd_ptr + 1;
+                end
+            end else begin
                 o_data <= fifo[rd_ptr];
-                o_dv <= 1'b1;
-                rd_ptr <= rd_ptr + 1;
+                o_dv <= 0;
+                rd_ptr <= rd_ptr;            
             end
         end
     end
-    // Logique de statut
-    assign o_full = (wr_ptr == rd_ptr + DEPTH);
-    assign o_empty = (wr_ptr == rd_ptr);
-
-
+    
+    always_ff @(posedge i_clk or posedge i_rst) begin
+        if (i_rst) begin
+            data_count <= 0;
+        end else begin
+            if (i_rd_en && !i_wr_en) begin
+                data_count <= data_count -1;
+            end else if(!i_rd_en && i_wr_en) begin
+                data_count <= data_count +1;             
+            end else begin
+                data_count <= data_count;
+            end
+        end
+    end
+    
+    assign o_full = (data_count == DEPTH);
+    assign o_empty = (data_count == 0);
+    
 
 endmodule
 

@@ -20,34 +20,30 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module socket # (parameter DATA_WITH = 8, DEPTH = 4)
+module socket # (parameter DATA_WIDTH = 8, DEPTH = 4)
                 (   input logic i_clk,
                     input logic i_rst,
-                    input logic [7:0] i_data,
+                    input logic [DATA_WIDTH-1:0] i_data,
                     input logic i_rd_en,
                     input logic i_wr_en,
-                    input logic i_full,
-                    output logic o_rd_en,
-                    output logic [7:0 ]o_data,
+                    
+                    output logic [DATA_WIDTH-1:0 ]o_data,
                     output logic o_dv,
-                    output logic o_full);
+                    output logic o_full,
+                    output logic o_empty);
 
-    logic empty_ctrl;
 
-    fifo #(.DATA_WITH(DATA_WITH), .DEPTH(DEPTH)) inst_fifo( .i_clk(i_clk),
-                                                                .i_rst(i_rst),
-                                                                .i_data(i_data),
-                                                                .i_rd_en(i_rd_en),
-                                                                .i_wr_en(i_wr_en),
-                                                                .o_data(o_data),
-                                                                .o_dv(o_dv),
-                                                                .o_full(o_full),
-                                                                .o_empty(empty_ctrl));
-    
-    socket_controler ctrl ( .i_clk(i_clk),
-                            .i_rst(i_rst), 
-                            .i_full(i_full),
-                            .i_empty(empty_ctrl),
-                            .o_rd_en(o_rd_en)); 
+    fifo #(.DATA_WIDTH(DATA_WIDTH), .DEPTH(DEPTH)) inst_fifo(
+        .i_clk(i_clk),
+        .i_rst(i_rst),
+        .i_data(i_data),
+        .i_rd_en(i_rd_en),
+        .i_wr_en(i_wr_en),
+        
+        .o_data(o_data),
+        .o_dv(o_dv),
+        .o_full(o_full),
+        .o_empty(o_empty));
+
 
 endmodule               
