@@ -35,7 +35,7 @@ module socket_controler #(parameter MAX_DATA_COUNT = 4)(
         init_data_count = 0;
         unique case ( current_state ) 
             st_wait : begin        
-                o_rd_en = 0'b0;
+                o_rd_en = 1'b0;
                 init_data_count = 1'b1;
                 if ( i_empty == 1'b0 | i_full == 1'b0 ) 
                     next_state = st_wait;
