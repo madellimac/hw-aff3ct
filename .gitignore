@@ -2,3 +2,4 @@ VIVADO
 *.jou
 *.log
 *.str
+.DS*
