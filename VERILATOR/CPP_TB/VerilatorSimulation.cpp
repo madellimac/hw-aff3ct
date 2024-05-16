@@ -1,26 +1,48 @@
 #include <stdlib.h>
 #include <iostream>
 #include <verilated.h>          // Pour Verilator
-#include "VTop.h"       // Remplacer "your_module" par le nom de votre module Verilog
+#include "VTop2.h"       // Remplacer "your_module" par le nom de votre module Verilog
 #include "VerilatorSimulation.hpp"
 
+using namespace aff3ct;
+using namespace aff3ct::module;
 
-    VerilatorSimulation::VerilatorSimulation(int frame_size) : frame_size(frame_size){
-        dut = new VTop;  // Remplacer "your_module" par le nom de votre module Verilog
+    template <typename T>
+    VerilatorSimulation<T>::VerilatorSimulation(int frame_size) : Module(), frame_size(frame_size) {
+        //dut = new VTop2;  // Remplacer "your_module" par le nom de votre module Verilog
+        
+        // dut = &model;
+        dut = new T;
         Verilated::traceEverOn(true);
         m_trace = new VerilatedVcdC;
         dut->trace(m_trace, 5);
         m_trace->open("waveform.vcd");
+        
+        this->set_name("VerilatorSimulation");
+        this->set_short_name("VerilatorSimulation"); 
+
+        auto &t = create_task("simulate");
+
+        auto input    = create_socket_in<int>(t, "input", frame_size);
+        auto output   = create_socket_out<int>(t, "output", frame_size);
+
+        this->create_codelet(t, [input, output](Module &m, runtime::Task &t, const size_t frame_id) -> int {
+        static_cast<VerilatorSimulation&>(m).simulate(  static_cast<int*>(t[input].get_dataptr()),
+                                                        static_cast<int*>(t[output].get_dataptr()),
+                                                        frame_id);
+        return 0;
+    });
+
     }
 
-    VerilatorSimulation::~VerilatorSimulation() {
+    template <typename T> VerilatorSimulation<T>::~VerilatorSimulation() {
         m_trace->close();
         delete m_trace;
         delete dut;
         // exit(EXIT_SUCCESS);
     }
 
-    void VerilatorSimulation::simulate(std::vector<int>& ref_bits, int cycle_count) {
+    template <typename T> void VerilatorSimulation<T>::simulate(const int* input, int *output, const int frame_id) {
         
         int input_data_count = 0;
         int output_data_count = 0;
@@ -30,8 +52,6 @@
         int i =0;
         int init_time = sim_time;
         int val;
-
-        std::cout << " new sim ";
 
         // while (sim_time < init_time+cycle_count) {
         while(output_data_count < frame_size) {
@@ -74,8 +94,8 @@
                     case shift_in :
                         dut->io_i_ready = 0;
                         dut->io_i_dv    = 1;
-                        std::cout << ref_bits[input_data_count] << " ";
-                        dut->io_i_data  = ref_bits[input_data_count++];
+                        std::cout << input[input_data_count] << " ";
+                        dut->io_i_data  = input[input_data_count++];
                         break;
                     case shift_out :
                         dut->io_i_dv    = 0;
@@ -83,6 +103,7 @@
                         val = dut->io_o_data;
                         if(dut->io_o_dv == 1) {
                             std::cout << val << " ";
+                            output[output_data_count] = val;
                             output_data_count++;                    
                         }
                         break;
@@ -109,15 +130,16 @@
     // Ajoutez d'autres méthodes pour contrôler votre simulation au besoin
 
 
-    bool VerilatorSimulation::is_reset_time(){
+    template <typename T> bool VerilatorSimulation<T>::is_reset_time(){
         return (sim_time < 7);
     }
 
-    bool VerilatorSimulation::is_rising_edge(){
+    template <typename T> bool VerilatorSimulation<T>::is_rising_edge(){
         return (sim_time%2 == 0);
     }
 
-    bool VerilatorSimulation::is_falling_edge(){
+    template <typename T> bool VerilatorSimulation<T>::is_falling_edge(){
         return (sim_time%2 != 0);
     }
 
+template class aff3ct::module::VerilatorSimulation<VTop2>;

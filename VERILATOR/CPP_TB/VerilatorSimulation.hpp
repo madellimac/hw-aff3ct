@@ -3,16 +3,20 @@
 
 #include <verilated.h>          // Pour Verilator
 #include <verilated_vcd_c.h>    // Pour la trace VCD
+//#include "VTop2.h"
+#include "Module/Module.hpp"
 
-class VerilatorSimulation {
-public:
-    VerilatorSimulation(int frame_size);
-    ~VerilatorSimulation();
+namespace aff3ct
+{
+namespace module
+{
 
-    void simulate(std::vector<int>& ref_bits, int cycle_count);
+template <typename T> class VerilatorSimulation  : public Module {
 
 private:
-    VTop* dut;         // Remplacer "your_module" par le nom de votre module Verilog
+    
+    //VTop2* dut;         // Remplacer "your_module" par le nom de votre module Verilog
+    T* dut;
     VerilatedVcdC* m_trace;
     vluint64_t sim_time = 0;
     vluint64_t MAX_SIM_TIME = 300;
@@ -22,6 +26,18 @@ private:
     bool is_reset_time();
     bool is_rising_edge();
     bool is_falling_edge();
+
+public:
+
+    VerilatorSimulation(int frame_size);
+    virtual ~VerilatorSimulation();
+
+protected:
+
+    virtual void simulate(const int* input, int *output, const int frame_id);
+
 };
+}
+}
 
 #endif // VERILATORSIMULATION_H

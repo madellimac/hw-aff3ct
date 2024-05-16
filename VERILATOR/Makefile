@@ -1,8 +1,7 @@
-VER_PATH = ../VERILOG/generated
-#VER_PATH = ../SV/src
-
-TOP = Top
+TOP = Top2
 TOP_FILE = $(TOP).v
+
+VER_PATH = ../VERILOG/generated/$(TOP)
 
 CHISEL_DIR = ../CHISEL
 CHISEL_MAIN = $(TOP)Main
@@ -14,8 +13,17 @@ TB_CPP := ./CPP_TB/tb_Top.cpp ./CPP_TB/VerilatorSimulation.cpp
 
 
 INC_ROOT = /usr/local/include
-INC = "-I$(INC_ROOT)/aff3ct-3.0.2/aff3ct -I$(INC_ROOT)/aff3ct-3.0.2/cli -I$(INC_ROOT)/aff3ct-3.0.2/mipp -I$(INC_ROOT)/aff3ct-3.0.2/rang -I./CPP_TB"
+AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
 
+INC = "-I$(AFF3CT_CORE)/include \
+	-I$(AFF3CT_CORE)/lib/rang/include \
+	-I$(AFF3CT_CORE)/lib/cpptrace/include/cpptrace \
+	-I$(AFF3CT_CORE)/lib/cpptrace/include/ctrace \
+	-I./CPP_TB"
+# -I$(INC_ROOT)/aff3ct-3.0.2/aff3ct \
+# -I$(INC_ROOT)/aff3ct-3.0.2/cli \
+# -I$(INC_ROOT)/aff3ct-3.0.2/mipp \
+# -I$(INC_ROOT)/aff3ct-3.0.2/rang \
 
 .PHONY:sim
 sim: waveform.vcd
@@ -45,7 +53,7 @@ waveform.vcd: ./obj_dir/V$(TOP)
 	@echo "### BUILDING SIM ###"
 	@echo "####################"
 #@touch obj_dir/V$(TOP)
-	make -C obj_dir -f V$(TOP).mk V$(TOP)
+	make -j10 -C obj_dir -f V$(TOP).mk V$(TOP)
 
 
 .stamp.verilate: $(VER_PATH)/$(TOP_FILE) $(TB_CPP)
@@ -53,12 +61,16 @@ waveform.vcd: ./obj_dir/V$(TOP)
 	@echo "##################"
 	@echo "### VERILATING ###"
 	@echo "##################"
-	verilator --trace --x-assign unique --x-initial unique -cc $(VER_PATH)/*.v --top-module $(TOP) --exe $(TB_CPP) -CFLAGS $(INC) -LDFLAGS /usr/local/lib/libaff3ct-3.0.2.a
+	verilator --trace --x-assign unique --x-initial unique -cc $(VER_PATH)/*.v --top-module $(TOP) --exe $(TB_CPP) \
+	-CFLAGS $(INC) \
+	-LDFLAGS $(AFF3CT_CORE)/build/lib/libaff3ct-core.a $(AFF3CT_CORE)/build/lib/cpptrace/lib/libcpptrace.a
+# -LDFLAGS /usr/local/lib/libaff3ct-3.0.2.a 
 	@touch .stamp.verilate
 
 #.PHONY:$(VER_PATH)/$(TOP_FILE) 
 $(VER_PATH)/$(TOP_FILE): $(CHISEL_SRC)
-	@$(MAKE) -C $(CHISEL_DIR) -f $(CHISEL_DIR)/Makefile TOP_MAIN=$(CHISEL_MAIN)
+#	@$(MAKE) -j10 -C $(CHISEL_DIR) -f $(CHISEL_DIR)/Makefile TOP_MAIN=$(CHISEL_MAIN)
+	@$(MAKE) -j10 -C $(CHISEL_DIR) -f $(CHISEL_DIR)/Makefile TOP=$(TOP)
 
 .PHONY:lint
 lint: $(VER_PATH)/$(TOP_FILE)
@@ -69,7 +81,7 @@ clean:
 	rm -rf .stamp.*;
 	rm -rf ./obj_dir
 	rm -rf waveform.vcd
-	rm -rf ../VERILOG/generated
+	rm -rf ../VERILOG/generated/$(TOP)
 	rm -rf $(CHISEL_DIR)/project
 	rm -rf $(CHISEL_DIR)/target
 	rm -rf $(CHISEL_DIR)/.stamp

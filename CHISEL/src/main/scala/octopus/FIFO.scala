@@ -5,8 +5,8 @@ import chisel3.util._
 
 class FIFO(pFrameSize: Int, pDataWidth: Int) extends Module {
   val io = IO(new Bundle {
-    val enq = Flipped(Decoupled(UInt(pDataWidth.W)))
-    val deq = Decoupled(UInt(pDataWidth.W))
+    val enq = Flipped(Decoupled(SInt(pDataWidth.W)))
+    val deq = Decoupled(SInt(pDataWidth.W))
   })    
 
     val count = RegInit(0.U(log2Ceil(pFrameSize+1).W))
@@ -88,14 +88,14 @@ class FIFO(pFrameSize: Int, pDataWidth: Int) extends Module {
         }
     }
 
-    val mem = SyncReadMem(pFrameSize, UInt(pDataWidth.W))
+    val mem = SyncReadMem(pFrameSize, SInt(pDataWidth.W))
     val enqPtr = RegInit(0.U(log2Ceil(pFrameSize).W))
     val deqPtr = RegInit(0.U(log2Ceil(pFrameSize).W))
     
     val validReg = RegInit(false.B)
 
     // Input buffer
-    val bitsReg = RegInit(0.U(pDataWidth.W))
+    val bitsReg = RegInit(0.S(pDataWidth.W))
     when(io.enq.valid){
         bitsReg := io.enq.bits
     }
