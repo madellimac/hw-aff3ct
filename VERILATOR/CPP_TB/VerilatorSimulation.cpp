@@ -1,25 +1,23 @@
 #include <stdlib.h>
 #include <iostream>
-#include <verilated.h>          // Pour Verilator
-#include "VTop2.h"       // Remplacer "your_module" par le nom de votre module Verilog
+#include <verilated.h>          
+#include "VTop_Level.h"       
 #include "VerilatorSimulation.hpp"
 
 using namespace aff3ct;
 using namespace aff3ct::module;
 
-    template <typename T>
-    VerilatorSimulation<T>::VerilatorSimulation(int frame_size) : Module(), frame_size(frame_size) {
-        //dut = new VTop2;  // Remplacer "your_module" par le nom de votre module Verilog
-        
-        // dut = &model;
-        dut = new T;
+    VerilatorSimulation::VerilatorSimulation(int frame_size) : Module(), frame_size(frame_size) {
+
+        dut = new VTop_Level;  // Remplacer "your_module" par le nom de votre module Verilog
+
         Verilated::traceEverOn(true);
         m_trace = new VerilatedVcdC;
         dut->trace(m_trace, 5);
         m_trace->open("waveform.vcd");
         
         this->set_name("VerilatorSimulation");
-        this->set_short_name("VerilatorSimulation"); 
+        this->set_short_name("VerilatorSimulation");
 
         auto &t = create_task("simulate");
 
@@ -35,14 +33,14 @@ using namespace aff3ct::module;
 
     }
 
-    template <typename T> VerilatorSimulation<T>::~VerilatorSimulation() {
+    VerilatorSimulation::~VerilatorSimulation() {
         m_trace->close();
         delete m_trace;
         delete dut;
         // exit(EXIT_SUCCESS);
-    }
+    }    
 
-    template <typename T> void VerilatorSimulation<T>::simulate(const int* input, int *output, const int frame_id) {
+    void VerilatorSimulation::simulate(const int* input, int *output, const int frame_id) {
         
         int input_data_count = 0;
         int output_data_count = 0;
@@ -53,7 +51,7 @@ using namespace aff3ct::module;
         int init_time = sim_time;
         int val;
 
-        // while (sim_time < init_time+cycle_count) {
+        // while (sim_time < 10000) {
         while(output_data_count < frame_size) {
             
             if(is_reset_time()){
@@ -92,8 +90,8 @@ using namespace aff3ct::module;
                         output_data_count = 0;
                         break;
                     case shift_in :
-                        dut->io_i_ready = 0;
                         dut->io_i_dv    = 1;
+                        dut->io_i_ready = 0;
                         std::cout << input[input_data_count] << " ";
                         dut->io_i_data  = input[input_data_count++];
                         break;
@@ -130,16 +128,14 @@ using namespace aff3ct::module;
     // Ajoutez d'autres méthodes pour contrôler votre simulation au besoin
 
 
-    template <typename T> bool VerilatorSimulation<T>::is_reset_time(){
+    bool VerilatorSimulation::is_reset_time(){
         return (sim_time < 7);
     }
 
-    template <typename T> bool VerilatorSimulation<T>::is_rising_edge(){
+    bool VerilatorSimulation::is_rising_edge(){
         return (sim_time%2 == 0);
     }
 
-    template <typename T> bool VerilatorSimulation<T>::is_falling_edge(){
+    bool VerilatorSimulation::is_falling_edge(){
         return (sim_time%2 != 0);
     }
-
-template class aff3ct::module::VerilatorSimulation<VTop2>;

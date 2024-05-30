@@ -1,8 +1,9 @@
 # Generate Verilog code
-TOP ?= Top
+TOP ?= my_top_default
 TOP_MAIN = $(TOP)Main
-#SRC = ./src/main/scala/*
-SRC := $(wildcard ./src/main/scala/octopus/*.scala)
+PACKAGE ?= my_package_default
+
+# SRC := $(wildcard ./src/main/scala/$(PROJECT)/*.scala)
 
 build : .stamp
 	@echo
@@ -13,5 +14,5 @@ build : .stamp
 	@echo "### GENERATING VERILOG FROM CHISEL ###"
 	@echo "######################################"
 #	sbt -Dtarget=../VERILOG/generated/$(TOP) 'runMain octopus.$(TOP_MAIN) --top-name $(TOP_MAIN)'
-	sbt 'runMain octopus.$(TOP_MAIN) --top-name $(TOP_MAIN)'
+	sbt 'runMain $(PACKAGE).$(TOP_MAIN) --top-name $(TOP_MAIN)'
 	@touch .stamp

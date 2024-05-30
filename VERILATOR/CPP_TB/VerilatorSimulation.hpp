@@ -4,19 +4,20 @@
 #include <verilated.h>          // Pour Verilator
 #include <verilated_vcd_c.h>    // Pour la trace VCD
 //#include "VTop2.h"
-#include "Module/Module.hpp"
+//#include "Module/Module.hpp"
+#include "aff3ct.hpp"
 
 namespace aff3ct
 {
 namespace module
 {
 
-template <typename T> class VerilatorSimulation  : public Module {
+class VerilatorSimulation  : public Module {
 
 private:
     
-    //VTop2* dut;         // Remplacer "your_module" par le nom de votre module Verilog
-    T* dut;
+    VTop_Level* dut;         // Remplacer "your_module" par le nom de votre module Verilog
+
     VerilatedVcdC* m_trace;
     vluint64_t sim_time = 0;
     vluint64_t MAX_SIM_TIME = 300;
@@ -26,6 +27,7 @@ private:
     bool is_reset_time();
     bool is_rising_edge();
     bool is_falling_edge();
+
 
 public:
 

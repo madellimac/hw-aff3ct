@@ -3,3 +3,7 @@ VIVADO
 *.log
 *.str
 .DS*
+CHISEL/.stamp
+CHISEL/project/
+CHISEL/target/
+CHISEL/tmp/
