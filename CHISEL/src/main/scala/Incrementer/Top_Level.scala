@@ -22,23 +22,32 @@ class Top_Level[T <: Bits](dataType : T, pFrameSize: Int) extends Module {
     val sock1 = Module(new Socket(dataType, pFrameSize))
     val sock2 = Module(new Socket(dataType, pFrameSize))
     
-    val incr1 = Module(new Incrementer(dataType.getWidth, pFrameSize))
-    
-    // val tx = Module(new UART_Tx(baudRate = 5000000, clockFreq = 50000000))
-    // val rx = Module(new UART_Rx(baudRate = 5000000, clockFreq = 50000000))
+    val tx = Module(new UART_Tx(baudRate = 5000000, clockFreq = 50000000))
+    val rx = Module(new UART_Rx(baudRate = 5000000, clockFreq = 50000000))
 
+    val fpga = Module(new Top_FPGA(dataType, pFrameSize))
+
+
+    // in => sock1 => tx => fpga => tx => sock2 => out
+
+    // in => sock1
     sock1.io.enq.valid := io.i_dv
     sock1.io.enq.bits  := io.i_data
     io.o_ready := sock1.io.enq.ready
 
-    sock1.io.deq <> incr1.io.enq
-    incr1.io.deq <> sock2.io.enq
+    // sock1 => tx
+    sock1.io.deq <> tx.io.in
 
-    // incr2.io.deq <> sock2.io.enq
-    // sock2.io.deq <> tx.io.in
-    // rx.io.rx := tx.io.tx 
-    // rx.io.out <> sock3.io.enq
+    // tx => fpga
+    fpga.io.i_data := tx.io.tx
 
+    // fpga => rx
+    rx.io.rx := fpga.io.o_data
+
+    // rx => sock2
+    rx.io.out <> sock2.io.enq
+
+    // sock2 => out
     io.o_dv := sock2.io.deq.valid
     io.o_data := sock2.io.deq.bits
     sock2.io.deq.ready := io.i_ready

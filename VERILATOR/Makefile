@@ -63,6 +63,9 @@ waveform.vcd: ./obj_dir/V$(TOP)
 	-LDFLAGS $(AFF3CT_CORE)/build/lib/libaff3ct-core.a $(AFF3CT_CORE)/build/lib/cpptrace/lib/libcpptrace.a -LDFLAGS /usr/local/lib/libaff3ct-3.0.2.a 
 	@touch .stamp.verilate
 
+.PHONY:chisel 
+chisel:$(VER_PATH)/$(TOP_FILE)
+
 $(VER_PATH)/$(TOP_FILE): $(CHISEL_SRC)
 	@$(MAKE) -j10 -C $(CHISEL_DIR) -f $(CHISEL_DIR)/Makefile TOP=$(TOP) PACKAGE=$(PACKAGE)
 
