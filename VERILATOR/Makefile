@@ -8,7 +8,7 @@ CHISEL_DIR = ../CHISEL
 CHISEL_MAIN = $(TOP)Main
 CHISEL_SRC = $(wildcard ../CHISEL/src/main/scala/$(PACKAGE)/*.scala)
 
-TB_CPP := ./CPP_TB/tb_$(PACKAGE).cpp ./CPP_TB/VerilatorSimulation.cpp ./CPP_TB/MySource.cpp ./CPP_TB/Comparator.cpp
+TB_CPP := ./CPP_TB/tb_$(PACKAGE).cpp ./CPP_TB/VerilatorSimulation.cpp ./CPP_TB/MySource.cpp ./CPP_TB/Comparator.cpp ./CPP_TB/SerialPort.cpp
 
 #AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
 #AFF3CT_ROOT = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct
@@ -42,6 +42,7 @@ INC = "-I$(STREAMPU)/include \
 	-I$(STREAMPU)/lib/rang/include \
 	-I$(STREAMPU)/lib/cpptrace/include/ctrace \
 	-I$(STREAMPU)/lib/cpptrace/include/cpptrace \
+	-I/opt/homebrew/Cellar/boost/1.85.0/include \
 	-I./CPP_TB"
 
 

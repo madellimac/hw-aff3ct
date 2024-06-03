@@ -5,6 +5,7 @@
 #include <verilated_vcd_c.h>
 #include "VTop_Level.h"
 #include "VerilatorSimulation.hpp"
+#include "SerialPort.hpp"
 
 #include <vector>
 #include <streampu.hpp>
@@ -35,7 +36,8 @@ int main(int argc, char** argv, char** env) {
     module::Finalizer     <int> finalizer_sw(FRAME_SIZE);
     module::Finalizer     <int> finalizer_hw(FRAME_SIZE);
     module::Source_random <int> src(FRAME_SIZE); 
-   
+    SerialPort serial("/dev/tty.usbserial-210292ABF7641", 115200, FRAME_SIZE); 
+
     VerilatorSimulation sim(FRAME_SIZE);
     
     // iter["iterate::out"]= incr1["increment::in"];
@@ -45,7 +47,7 @@ int main(int argc, char** argv, char** env) {
 
     src["generate::out_data"] = sim["simulate::input"];
     // initializer["initialize::out"] = sim["simulate::input"];
-    sim["simulate::output"] = finalizer_hw["finalize::in"];
+    sim["simulate::output"] = serial["write::input"];
 
     // std::vector<runtime::Task*> first = {&initializer("initialize")};
     std::vector<runtime::Task*> first = {&src("generate")};
