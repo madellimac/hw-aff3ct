@@ -10,10 +10,10 @@
 #include "Comparator.hpp"
 
 #include <vector>
-#include <aff3ct.hpp>
+#include <streampu.hpp>
 
-using namespace aff3ct;
-using namespace aff3ct::module;
+using namespace spu;
+using namespace spu::module;
 
 #define VERIF_START_TIME 7
 vluint64_t sim_time = 0;

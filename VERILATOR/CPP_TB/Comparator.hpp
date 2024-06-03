@@ -1,9 +1,9 @@
 #ifndef COMPARATOR_H
 #define COMPARATOR_H
 
-#include "aff3ct.hpp"
+#include "streampu.hpp"
 
-namespace aff3ct
+namespace spu
 {
 namespace module
 {

@@ -5,9 +5,9 @@
 #include <verilated_vcd_c.h>    // Pour la trace VCD
 //#include "VTop2.h"
 //#include "Module/Module.hpp"
-#include "aff3ct.hpp"
+#include "streampu.hpp"
 
-namespace aff3ct
+namespace spu
 {
 namespace module
 {

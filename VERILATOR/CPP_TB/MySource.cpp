@@ -1,8 +1,8 @@
 #include <random>
 #include "MySource.hpp"
 
-using namespace aff3ct;
-using namespace aff3ct::module;
+using namespace spu;
+using namespace spu::module;
 
     MySource::MySource(int frame_size) : Module(), frame_size(frame_size) {
 

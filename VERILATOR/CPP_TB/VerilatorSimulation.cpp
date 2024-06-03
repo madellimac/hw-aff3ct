@@ -4,8 +4,8 @@
 #include "VTop_Level.h"       
 #include "VerilatorSimulation.hpp"
 
-using namespace aff3ct;
-using namespace aff3ct::module;
+using namespace spu;
+using namespace spu::module;
 
     VerilatorSimulation::VerilatorSimulation(int frame_size) : Module(), frame_size(frame_size) {
 

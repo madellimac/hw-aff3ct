@@ -1,9 +1,9 @@
 #ifndef MYSOURCE_H
 #define MYSOURCE_H
 
-#include "aff3ct.hpp"
+#include "streampu.hpp"
 
-namespace aff3ct
+namespace spu
 {
 namespace module
 {

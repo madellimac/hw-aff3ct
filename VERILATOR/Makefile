@@ -10,18 +10,40 @@ CHISEL_SRC = $(wildcard ../CHISEL/src/main/scala/$(PACKAGE)/*.scala)
 
 TB_CPP := ./CPP_TB/tb_$(PACKAGE).cpp ./CPP_TB/VerilatorSimulation.cpp ./CPP_TB/MySource.cpp ./CPP_TB/Comparator.cpp
 
-AFF3CT_ROOT = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct
-AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
+#AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
+#AFF3CT_ROOT = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct
 
-INC = "-I$(AFF3CT_ROOT)/include \
-	-I$(AFF3CT_ROOT)/lib/aff3ct-core/include \
-	-I$(AFF3CT_ROOT)/lib/rang/include \
-	-I$(AFF3CT_ROOT)/lib/cpptrace/include/cpptrace \
-	-I$(AFF3CT_ROOT)/lib/cpptrace/include/ctrace \
-	-I$(AFF3CT_ROOT)/lib/MIPP/src \
-	-I$(AFF3CT_ROOT)/lib/cli/src \
-	-I$(AFF3CT_ROOT)/lib/MSVC/include \
+# INC = "-I$(AFF3CT_ROOT)/include \
+# 	-I$(AFF3CT_ROOT)/lib/aff3ct-core/include \
+# 	-I$(AFF3CT_ROOT)/lib/rang/include \
+# 	-I$(AFF3CT_ROOT)/lib/cpptrace/include/cpptrace \
+# 	-I$(AFF3CT_ROOT)/lib/cpptrace/include/ctrace \
+# 	-I$(AFF3CT_ROOT)/lib/MIPP/src \
+# 	-I$(AFF3CT_ROOT)/lib/cli/src \
+# 	-I$(AFF3CT_ROOT)/lib/MSVC/include \
+# 	-I./CPP_TB"
+
+# AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
+# AFF3CT_ROOT = /Users/cleroux/Documents/work/recherche/PROJECT/HW_AFF3CT/sandbox/aff3ct
+
+# INC = "-I$(AFF3CT_ROOT)/include \
+# 	-I$(AFF3CT_ROOT)/lib/streampu/include \
+# 	-I$(AFF3CT_ROOT)/lib/streampu/lib/rang/include \
+# 	-I$(AFF3CT_ROOT)/lib/streampu/lib/cpptrace/include/cpptrace \
+# 	-I$(AFF3CT_ROOT)/lib/streampu/lib/cpptrace/include/ctrace \
+# 	-I$(AFF3CT_ROOT)/lib/MIPP/src \
+# 	-I$(AFF3CT_ROOT)/lib/cli/src \
+# 	-I$(AFF3CT_ROOT)/lib/MSVC/include \
+# 	-I./CPP_TB"
+
+STREAMPU = /Users/cleroux/Documents/work/recherche/PROJECT/HW_AFF3CT/sandbox/streampu
+
+INC = "-I$(STREAMPU)/include \
+	-I$(STREAMPU)/lib/rang/include \
+	-I$(STREAMPU)/lib/cpptrace/include/ctrace \
+	-I$(STREAMPU)/lib/cpptrace/include/cpptrace \
 	-I./CPP_TB"
+
 
 .PHONY:sim
 sim: waveform.vcd
@@ -60,8 +82,10 @@ waveform.vcd: ./obj_dir/V$(TOP)
 	@echo "##################"
 	verilator --trace --x-assign unique --x-initial unique -cc $(VER_PATH)/*.v --top-module $(TOP) --exe $(TB_CPP) \
 	-CFLAGS $(INC) \
-	-LDFLAGS $(AFF3CT_CORE)/build/lib/libaff3ct-core.a $(AFF3CT_CORE)/build/lib/cpptrace/lib/libcpptrace.a -LDFLAGS /usr/local/lib/libaff3ct-3.0.2.a 
+	-LDFLAGS $(STREAMPU)/build_release/lib/libstreampu.a $(STREAMPU)/build_release/lib/cpptrace/lib/libcpptrace.a
 	@touch .stamp.verilate
+
+#-LDFLAGS $(AFF3CT_CORE)/build/lib/libaff3ct-core.a $(AFF3CT_CORE)/build/lib/cpptrace/lib/libcpptrace.a -LDFLAGS /usr/local/lib/libaff3ct-3.0.2.a 
 
 .PHONY:chisel 
 chisel:$(VER_PATH)/$(TOP_FILE)
