@@ -22,8 +22,8 @@ class Top_Level[T <: Bits](dataType : T, pFrameSize: Int) extends Module {
     val sock1 = Module(new Socket(dataType, pFrameSize))
     val sock2 = Module(new Socket(dataType, pFrameSize))
     
-    val tx = Module(new UART_Tx(baudRate = 5000000, clockFreq = 50000000))
-    val rx = Module(new UART_Rx(baudRate = 5000000, clockFreq = 50000000))
+    val tx = Module(new UART_Tx(baudRate = 115200, clockFreq = 100000000))
+    val rx = Module(new UART_Rx(baudRate = 115200, clockFreq = 100000000))
 
     val fpga = Module(new Top_FPGA(dataType, pFrameSize))
 

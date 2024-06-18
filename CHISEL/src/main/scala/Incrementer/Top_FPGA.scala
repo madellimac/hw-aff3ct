@@ -13,13 +13,15 @@ class Top_FPGA[T <: Bits](dataType : T, pFrameSize: Int) extends Module {
     })
 
     val incr1 = Module(new Incrementer(dataType.getWidth, pFrameSize))
-    
-    val tx = Module(new UART_Tx(baudRate = 5000000, clockFreq = 50000000))
-    val rx = Module(new UART_Rx(baudRate = 5000000, clockFreq = 50000000))
+    // val sock1 = Module(new Socket(dataType, pFrameSize))
+    val tx = Module(new UART_Tx(baudRate = 115200, clockFreq = 100000000))
+    val rx = Module(new UART_Rx(baudRate = 115200, clockFreq = 100000000))
 
     rx.io.rx := io.i_data
     rx.io.out <> incr1.io.enq
     incr1.io.deq <> tx.io.in
+    // rx.io.out <> sock1.io.enq
+    // sock1.io.deq <> tx.io.in
     io.o_data := tx.io.tx
 
 }

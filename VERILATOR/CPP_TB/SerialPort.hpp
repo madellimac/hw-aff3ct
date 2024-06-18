@@ -20,7 +20,7 @@ public:
 
     SerialPort(const std::string& port_name, unsigned int baud_rate, int frame_size);
     void write(int* input, int* output, const int frame_id);
-    void read(int* data, const int frame_id);
+    void read(int* output, const int frame_id);
     void close();
     void run();
 

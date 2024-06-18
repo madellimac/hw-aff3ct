@@ -38,7 +38,8 @@ int main(int argc, char** argv, char** env) {
     module::Comparator comp_sim(FRAME_SIZE);
     module::Comparator comp_fpga(FRAME_SIZE);
     VerilatorSimulation sim(FRAME_SIZE);
-    SerialPort serial("/dev/tty.usbserial-210292ABF7641", 115200, FRAME_SIZE); 
+    // SerialPort serial("/dev/tty.usbserial-210292ABF7641", 115200, FRAME_SIZE); 
+    SerialPort serial("/dev/ttyUSB2", 115200, FRAME_SIZE); 
 
     
     my_source   ["generate::output" ] = incr1           ["increment::in"];

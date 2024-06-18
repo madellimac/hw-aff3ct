@@ -36,15 +36,17 @@ TB_CPP := ./CPP_TB/tb_$(PACKAGE).cpp ./CPP_TB/VerilatorSimulation.cpp ./CPP_TB/M
 # 	-I$(AFF3CT_ROOT)/lib/MSVC/include \
 # 	-I./CPP_TB"
 
-STREAMPU = /Users/cleroux/Documents/work/recherche/PROJECT/HW_AFF3CT/sandbox/streampu
+# STREAMPU = /Users/cleroux/Documents/work/recherche/PROJECT/HW_AFF3CT/sandbox/streampu
+STREAMPU = /home/cleroux/PROJECTS/streampu
 
 INC = "-I$(STREAMPU)/include \
 	-I$(STREAMPU)/lib/rang/include \
 	-I$(STREAMPU)/lib/cpptrace/include/ctrace \
 	-I$(STREAMPU)/lib/cpptrace/include/cpptrace \
-	-I/opt/homebrew/Cellar/boost/1.85.0/include \
+	-I/usr/include \
 	-I./CPP_TB"
 
+#-I/opt/homebrew/Cellar/boost/1.85.0/include \
 
 .PHONY:sim
 sim: waveform.vcd
