@@ -10,32 +10,6 @@ CHISEL_SRC = $(wildcard ../CHISEL/src/main/scala/$(PACKAGE)/*.scala)
 
 TB_CPP := ./CPP_TB/tb_$(PACKAGE).cpp ./CPP_TB/VerilatorSimulation.cpp ./CPP_TB/MySource.cpp ./CPP_TB/Comparator.cpp ./CPP_TB/SerialPort.cpp
 
-#AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
-#AFF3CT_ROOT = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct
-
-# INC = "-I$(AFF3CT_ROOT)/include \
-# 	-I$(AFF3CT_ROOT)/lib/aff3ct-core/include \
-# 	-I$(AFF3CT_ROOT)/lib/rang/include \
-# 	-I$(AFF3CT_ROOT)/lib/cpptrace/include/cpptrace \
-# 	-I$(AFF3CT_ROOT)/lib/cpptrace/include/ctrace \
-# 	-I$(AFF3CT_ROOT)/lib/MIPP/src \
-# 	-I$(AFF3CT_ROOT)/lib/cli/src \
-# 	-I$(AFF3CT_ROOT)/lib/MSVC/include \
-# 	-I./CPP_TB"
-
-# AFF3CT_CORE = /Users/cleroux/Documents/work/recherche/PROJECT/FEC/AFF3CT/aff3ct-core
-# AFF3CT_ROOT = /Users/cleroux/Documents/work/recherche/PROJECT/HW_AFF3CT/sandbox/aff3ct
-
-# INC = "-I$(AFF3CT_ROOT)/include \
-# 	-I$(AFF3CT_ROOT)/lib/streampu/include \
-# 	-I$(AFF3CT_ROOT)/lib/streampu/lib/rang/include \
-# 	-I$(AFF3CT_ROOT)/lib/streampu/lib/cpptrace/include/cpptrace \
-# 	-I$(AFF3CT_ROOT)/lib/streampu/lib/cpptrace/include/ctrace \
-# 	-I$(AFF3CT_ROOT)/lib/MIPP/src \
-# 	-I$(AFF3CT_ROOT)/lib/cli/src \
-# 	-I$(AFF3CT_ROOT)/lib/MSVC/include \
-# 	-I./CPP_TB"
-
 # STREAMPU = /Users/cleroux/Documents/work/recherche/PROJECT/HW_AFF3CT/sandbox/streampu
 STREAMPU = /home/cleroux/PROJECTS/streampu
 
@@ -88,8 +62,6 @@ waveform.vcd: ./obj_dir/V$(TOP)
 	-LDFLAGS $(STREAMPU)/build_release/lib/libstreampu.a $(STREAMPU)/build_release/lib/cpptrace/lib/libcpptrace.a
 	@touch .stamp.verilate
 
-#-LDFLAGS $(AFF3CT_CORE)/build/lib/libaff3ct-core.a $(AFF3CT_CORE)/build/lib/cpptrace/lib/libcpptrace.a -LDFLAGS /usr/local/lib/libaff3ct-3.0.2.a 
-
 .PHONY:chisel 
 chisel:$(VER_PATH)/$(TOP_FILE)
 
@@ -109,5 +81,6 @@ clean:
 	rm -rf $(CHISEL_DIR)/project
 	rm -rf $(CHISEL_DIR)/target
 	rm -rf $(CHISEL_DIR)/.stamp
+	rm ../VIVADO/vivado*
 
 

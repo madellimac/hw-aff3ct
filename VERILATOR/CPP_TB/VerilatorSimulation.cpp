@@ -92,7 +92,6 @@ using namespace spu::module;
                     case shift_in :
                         dut->io_i_dv    = 1;
                         dut->io_i_ready = 0;
-                        std::cout << input[input_data_count] << " ";
                         dut->io_i_data  = input[input_data_count++];
                         break;
                     case shift_out :
@@ -100,7 +99,6 @@ using namespace spu::module;
                         dut->io_i_ready = 1;
                         val = dut->io_o_data;
                         if(dut->io_o_dv == 1) {
-                            std::cout << val << " ";
                             output[output_data_count] = val;
                             output_data_count++;                    
                         }
@@ -122,7 +120,6 @@ using namespace spu::module;
             sim_time++;
            
         }
-        std::cout << std::endl;
     }
 
     // Ajoutez d'autres méthodes pour contrôler votre simulation au besoin
