@@ -10,6 +10,7 @@
 #include "Comparator.hpp"
 #include "SerialPort.hpp"
 
+
 #include <vector>
 #include <streampu.hpp>
 
@@ -91,12 +92,11 @@ int main(int argc, char** argv, char** env) {
             t->set_debug(true);
         }
 
-    for(auto i = 0; i < 1000; i++)
+    for(auto i = 0; i < 3; i++)
     {
         seq.exec_seq();
     }
 
     tools::Stats::show(seq.get_tasks_per_types(), true, false);
     
-
 }

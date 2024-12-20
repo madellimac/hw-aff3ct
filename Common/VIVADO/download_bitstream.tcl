@@ -30,7 +30,7 @@ if { [llength $argv] != 1 } {
 
 # Récupérer l'argument
 set bitstream [lindex $argv 0]
-
+puts "Bit stream : $bitstream"
 # Ouvrir l'environnement matériel
 open_hw_manager
 

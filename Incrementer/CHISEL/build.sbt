@@ -9,5 +9,7 @@ scalacOptions ++= Seq(
 addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.6" cross CrossVersion.full)
 libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.6"
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
+Compile / unmanagedSourceDirectories += baseDirectory.value / "../../Common/CHISEL/stream_PU"
+Compile / unmanagedSourceDirectories += baseDirectory.value / "../../Common/CHISEL/UART"
 
 parallelExecution := true
