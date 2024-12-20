@@ -7,7 +7,7 @@
 using namespace spu;
 using namespace spu::module;
 
-    VerilatorSimulation::VerilatorSimulation(int frame_size) : Module(), frame_size(frame_size) {
+    VerilatorSimulation::VerilatorSimulation(int frame_size) : Stateful(), frame_size(frame_size) {
 
         dut = new VTop_Level;  // Remplacer "your_module" par le nom de votre module Verilog
 

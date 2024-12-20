@@ -7,7 +7,7 @@ class StateMetricUnit( param : Viterbi_Param) extends Module {
     val io = IO(new Bundle {
     val i_valid = Input(Bool())
     val i_BM = Input(Vec(param.N_BM, SInt(param.Q_BM.W)))
-    val o_decision  = Output(UInt(8.W))
+    val o_decision  = Output(UInt(param.N_states.W))
     val o_valid = Output(Bool())
 })
 

@@ -5,7 +5,7 @@ using namespace spu;
 using namespace spu::module;
 
 SerialPort::SerialPort(const std::string& port_name, unsigned int baud_rate, int frame_size)
-    : io(), serial(io, port_name), Module(), frame_size(frame_size)
+    : io(), serial(io, port_name), Stateful(), frame_size(frame_size)
 {
     serial.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
     serial.set_option(boost::asio::serial_port_base::character_size(8));

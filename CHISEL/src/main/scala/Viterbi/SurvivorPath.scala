@@ -8,6 +8,7 @@ class SurvivorPath( param : Viterbi_Param) extends Module {
     val i_valid     = Input (Bool())
     val i_data      = Input (UInt(param.N_states.W))
     val o_data      = Output(SInt(1.W))
+    val o_valid     = Output(Bool())
 })
 
     val SPStage = VecInit(Seq.fill(param.SP_length)(Module(new SurvivorPathStage(param)).io))
@@ -24,4 +25,11 @@ class SurvivorPath( param : Viterbi_Param) extends Module {
     }
 
     io.o_data := SPStage(param.SP_length-1).o_data(0).asSInt()
+
+    val shiftReg = RegInit(VecInit(Seq.fill(param.SP_length)(false.B)))
+
+    shiftReg := shiftReg.tail :+ io.i_valid
+
+    io.o_valid := shiftReg.head
+
 }

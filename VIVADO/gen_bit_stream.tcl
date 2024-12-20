@@ -5,12 +5,15 @@ set top_module "Top_FPGA"
 # set part_name "xc7z020clg484-1"  # Modifier selon votre FPGA
 set part_name "xc7a100tcsg324-1"
 
+set package [lindex $argv 0]
+
 set_part $part_name
 # Créer un nouveau projet
 # create_project $project_name ./project_dir -part $part_name
 
 # Ajouter des fichiers Verilog au projet
-read_verilog [glob ../VERILOG/generated/Incrementer/*.v]
+# read_verilog [glob ../VERILOG/generated/Incrementer/*.v]
+read_verilog [glob ../VERILOG/generated/Viterbi/*.v]
 # add_files [glob ../VERILOG/generated/Incrementer/*.v]
 
 read_xdc nexysA7.xdc
@@ -27,4 +30,4 @@ place_design
 route_design
 
 # Générer le bitstream
-write_bitstream -force ./$top_module.bit
+write_bitstream -force ./$package.bit

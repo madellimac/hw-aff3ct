@@ -26,7 +26,7 @@ class ACS( param : Viterbi_Param) extends Module {
 
     sel_min := (sum(0) < sum(1))
 
-    // regValid := false.B
+    regValid := false.B
     when (io.i_valid){
         regSM := Mux(sel_min, sum(0), sum(1))
         regValid := true.B

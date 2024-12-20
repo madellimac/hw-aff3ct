@@ -12,7 +12,7 @@ namespace spu
 namespace module
 {
 
-class VerilatorSimulation  : public Module {
+class VerilatorSimulation  : public Stateful {
 
 private:
     

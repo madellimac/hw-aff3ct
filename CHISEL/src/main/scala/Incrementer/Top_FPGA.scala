@@ -17,6 +17,7 @@ class Top_FPGA[T <: Bits](dataType : T, pFrameSize: Int) extends Module {
     val incr3 = Module(new Incrementer(dataType.getWidth, pFrameSize))
     val incr4 = Module(new Incrementer(dataType.getWidth, pFrameSize))
     val sock1 = Module(new Socket(dataType, pFrameSize))
+    
     // val sock2 = Module(new Socket(dataType, pFrameSize))
     
     val tx = Module(new UART_Tx(baudRate = 115200, clockFreq = 100000000))

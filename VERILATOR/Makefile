@@ -1,12 +1,14 @@
 TOP = Top_Level
 TOP_FILE = $(TOP).v
-PACKAGE = Incrementer
+PACKAGE = Viterbi
 
 VER_PATH = ../VERILOG/generated/$(PACKAGE)
 
 CHISEL_DIR = ../CHISEL
 CHISEL_MAIN = $(TOP)Main
 CHISEL_SRC = $(wildcard ../CHISEL/src/main/scala/$(PACKAGE)/*.scala)
+
+BIT_STREAM = ../VIVADO/$(PACKAGE).bit
 
 TB_CPP := ./CPP_TB/tb_$(PACKAGE).cpp ./CPP_TB/VerilatorSimulation.cpp ./CPP_TB/MySource.cpp ./CPP_TB/Comparator.cpp ./CPP_TB/SerialPort.cpp
 
@@ -37,6 +39,16 @@ waves: waveform.vcd
 	@echo "### WAVES ###"
 	gtkwave waveform.vcd
 
+.PHONY: bit_stream
+bit_stream : $(BIT_STREAM)
+
+$(BIT_STREAM) : .stamp.verilate
+	@(cd ../VIVADO && vivado -mode batch -source ../VIVADO/gen_bit_stream.tcl -tclargs $(PACKAGE))
+
+.PHONY: fpga
+fpga : $(BIT_STREAM)
+	@(cd ../VIVADO && vivado -mode batch -source ../VIVADO/download_bitstream.tcl -tclargs $(BIT_STREAM))
+
 waveform.vcd: ./obj_dir/V$(TOP)
 	@echo
 	@echo "###################"
@@ -63,14 +75,10 @@ waveform.vcd: ./obj_dir/V$(TOP)
 	@touch .stamp.verilate
 
 .PHONY:chisel 
-chisel:$(VER_PATH)/$(TOP_FILE)
+chisel:$(VER_PATH)/$(TOP_FILE) $(CHISEL_SRC)
 
 $(VER_PATH)/$(TOP_FILE): $(CHISEL_SRC)
 	@$(MAKE) -j10 -C $(CHISEL_DIR) -f $(CHISEL_DIR)/Makefile TOP=$(TOP) PACKAGE=$(PACKAGE)
-
-.PHONY:lint
-lint: $(VER_PATH)/$(TOP_FILE)
-	verilator --lint-only $(VER_PATH)/$(TOP_FILE)
 
 .PHONY: clean
 clean:

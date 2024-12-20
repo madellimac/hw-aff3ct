@@ -8,15 +8,16 @@ namespace spu
 namespace module
 {
 
-class MySource  : public Module {
+class MySource  : public Stateful {
 
 private:
     
     int frame_size;
+    int max_val;
 
 public:
 
-    MySource(int frame_size);
+    MySource(int frame_size, int max_val);
     virtual ~MySource();
 
 protected:

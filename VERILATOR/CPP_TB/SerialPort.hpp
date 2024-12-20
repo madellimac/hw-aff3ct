@@ -14,7 +14,7 @@ namespace spu
 namespace module
 {
 
-class SerialPort : public Module {
+class SerialPort : public Stateful {
 
 public:
 

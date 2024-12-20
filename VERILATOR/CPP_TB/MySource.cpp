@@ -4,7 +4,7 @@
 using namespace spu;
 using namespace spu::module;
 
-    MySource::MySource(int frame_size) : Module(), frame_size(frame_size) {
+    MySource::MySource(int frame_size, int max_val) : Stateful(), frame_size(frame_size), max_val(max_val) {
 
         this->set_name("MySource");
         this->set_short_name("MySource");
@@ -27,7 +27,8 @@ using namespace spu::module;
         
         std::random_device rd;
         std::mt19937 rand_gen(rd());
-        std::uniform_int_distribution<> dis(0, 63);
+        // std::mt19937 rand_gen(42);
+        std::uniform_int_distribution<> dis(0, max_val);
 
         int i = 0;
         while(i < frame_size)

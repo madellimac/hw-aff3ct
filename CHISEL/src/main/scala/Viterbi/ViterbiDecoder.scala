@@ -44,7 +44,8 @@ class ViterbiDecoder(
     spu.io.i_valid := smu.io.o_valid
 
     io.deq.bits := spu.io.o_data
-    io.deq.valid := smu.io.o_valid
+    io.deq.valid := spu.io.o_valid
+    // io.deq.valid := smu.io.o_valid
 
     // val cat_BMU = Cat(bmu.io.o_MB(3), bmu.io.o_MB(2), bmu.io.o_MB(1), bmu.io.o_MB(0))
     
