@@ -1,7 +1,7 @@
 TOP = Top_Level
 TOP_FILE = $(TOP).v
 
-PROJECT = Incrementer
+PROJECT = Viterbi
 
 STREAMPU = /home/cleroux/PROJECTS/streampu
 
@@ -11,13 +11,14 @@ CHISEL_DIR = $(ROOT)/$(PROJECT)/CHISEL
 VERILATOR_DIR = $(ROOT)/$(PROJECT)/VERILATOR
 VERILOG_DIR = $(ROOT)/$(PROJECT)/VERILOG/generated/$(PROJECT)
 VIVADO_DIR = $(ROOT)/$(PROJECT)/VIVADO
+CPP_DIR = $(ROOT)/$(PROJECT)/CPP
 COMMON_VIVADO_DIR = $(ROOT)/Common/VIVADO
 
 #COMMON_CPP := $(ROOT)/Common/streampu/
-# TB_CPP := $(VERILATOR_DIR)/CPP_TB/tb_$(PROJECT).cpp $(COMMON_CPP)/VerilatorSimulation.cpp $(COMMON_CPP)/MySource.cpp $(COMMON_CPP)/Comparator.cpp $(COMMON_CPP)/SerialPort.cpp
+# CPP_SRC := $(VERILATOR_DIR)/CPP_TB/tb_$(PROJECT).cpp $(COMMON_CPP)/VerilatorSimulation.cpp $(COMMON_CPP)/MySource.cpp $(COMMON_CPP)/Comparator.cpp $(COMMON_CPP)/SerialPort.cpp
 
 COMMON_CPP = $(wildcard $(ROOT)/Common/streampu/*.cpp)
-TB_CPP := $(VERILATOR_DIR)/CPP_TB/tb_$(PROJECT).cpp $(COMMON_CPP)
+CPP_SRC := $(VERILATOR_DIR)/CPP_TB/tb_$(PROJECT).cpp $(COMMON_CPP) $(wildcard $(CPP_DIR)/*.cpp)
 
 CHISEL_MAIN = $(TOP)Main
 CHISEL_SRC = $(wildcard $(CHISEL_DIR)/src/main/scala/*.scala)
@@ -30,7 +31,8 @@ INC = "-I$(STREAMPU)/include \
 	-I$(STREAMPU)/lib/cpptrace/include/cpptrace \
 	-I/usr/include \
 	-I$(VERILATOR_DIR)/CPP_TB \
-	-I$(ROOT)/Common/streampu"
+	-I$(ROOT)/Common/streampu \
+	-I$(CPP_DIR)"
 
 .PHONY:sim
 sim: waveform.vcd
@@ -72,13 +74,13 @@ $(VERILATOR_DIR)/obj_dir/V$(TOP): .stamp.verilate
 	@echo "####################"	
 	make -j10 -C $(VERILATOR_DIR)/obj_dir -f V$(TOP).mk V$(TOP)
 
-.stamp.verilate: $(VERILOG_DIR)/$(TOP_FILE) $(TB_CPP)
+.stamp.verilate: $(VERILOG_DIR)/$(TOP_FILE) $(CPP_SRC)
 	@echo
 	@echo "##################"
 	@echo "### VERILATING ###"
 	@echo "##################"
 	mkdir -p $(VERILATOR_DIR)/obj_dir
-	verilator --trace --x-assign unique --x-initial unique -cc $(VERILOG_DIR)/*.v --top-module $(TOP) --exe $(TB_CPP) --Mdir $(VERILATOR_DIR)/obj_dir \
+	verilator --trace --x-assign unique --x-initial unique -cc $(VERILOG_DIR)/*.v --top-module $(TOP) --exe $(CPP_SRC) --Mdir $(VERILATOR_DIR)/obj_dir \
 	-CFLAGS $(INC) \
 	-LDFLAGS $(STREAMPU)/build_release/lib/libstreampu.a $(STREAMPU)/build_release/lib/cpptrace/lib/libcpptrace.a
 	@touch .stamp.verilate
