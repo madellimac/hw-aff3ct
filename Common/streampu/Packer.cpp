@@ -3,9 +3,18 @@
 using namespace spu;
 using namespace spu::module;
 
-Packer::Packer(int frame_size, int packing_ratio)
-    : Stateful(), frame_size(frame_size), packing_ratio(packing_ratio)
+Packer::Packer(int frame_size, int packing_ratio, int data_width)
+    : Stateful(), frame_size(frame_size), packing_ratio(packing_ratio), data_width(data_width)
 {
+
+    mask = (1 << data_width) - 1;
+    if (data_width*packing_ratio > 32)
+    {
+        std::stringstream message;
+        message << "cannot pack " << packing_ratio << "data of width " << data_width << " in a 32 bits word";
+        throw tools::invalid_argument(__FILE__, __LINE__, __func__, message.str());
+    }
+
     this->set_name("Packer");
     this->set_short_name("Packer");
     
@@ -25,7 +34,8 @@ void Packer::pack(int* input, int* output, const int frame_id)
 {
     for (auto i = 0; i < frame_size; i++)
     {
+        output[i] = 0;
         for (auto j = 0; j < packing_ratio; j++)
-            output[i] = (output[i]<<8) | input[packing_ratio*i + j];
+            output[i] = ((mask&input[packing_ratio*i + j]) << (j*data_width)) | output[i];
     }
 }

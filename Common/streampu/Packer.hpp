@@ -12,13 +12,15 @@ class Packer : public Stateful {
 
 public:
 
-    Packer(int frame_size, int packing_ratio);
+    Packer(int frame_size, int packing_ratio, int data_width);
     void pack(int* input, int* output, const int frame_id);
     
 private:
 
     int frame_size;
     int packing_ratio;
+    int data_width;
+    int mask;
     
 };
 }

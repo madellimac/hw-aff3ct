@@ -13,11 +13,11 @@ class MySource  : public Stateful {
 private:
     
     int frame_size;
-    int max_val;
+    int data_width;
 
 public:
 
-    MySource(int frame_size, int max_val);
+    MySource(int frame_size, int data_width);
     virtual ~MySource();
 
 protected:

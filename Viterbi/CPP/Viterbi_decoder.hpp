@@ -21,15 +21,21 @@ public:
     
 private:
 
+    int encode(int i);
     int K;
     std::vector<int> poly_gen;
+    int poly_deg;
     int Q_LLR;
     size_t outputs_nb;
+    int SM_nb;
     int BM_nb;
     int N;
 
     std::vector<std::vector<int>> BM;
     std::vector<std::vector<int>> BM_coef;
+
+    std::vector<std::vector<int>> SM;
+
 };
 }
 }

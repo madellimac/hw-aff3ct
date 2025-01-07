@@ -15,7 +15,7 @@ class ACS( param : Viterbi_Param) extends Module {
 })
 
     val sum      = Wire(Vec(2, SInt(param.Q_SM.W)))
-    val sel_min  = Wire(Bool())
+    val sel  = Wire(Bool())
 
     val regSM    = RegInit(0.S(param.Q_SM.W))
     val regValid = RegInit(false.B)
@@ -24,13 +24,17 @@ class ACS( param : Viterbi_Param) extends Module {
     sum(0) := io.i_BM(0) + io.i_SM(0)
     sum(1) := io.i_BM(1) + io.i_SM(1)
 
-    sel_min := (sum(0) < sum(1))
+    if(param.ACS_min_max == "min"){
+        sel := (sum(0) < sum(1))
+    } else {
+        sel := (sum(0) > sum(1))
+    }
 
     regValid := false.B
     when (io.i_valid){
-        regSM := Mux(sel_min, sum(0), sum(1))
+        regSM := Mux(sel, sum(0), sum(1))
         regValid := true.B
-        regDec := !sel_min
+        regDec := !sel
     }
 
     io.o_valid := regValid

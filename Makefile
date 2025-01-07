@@ -47,7 +47,7 @@ build: $(VERILATOR_DIR)/obj_dir/V$(TOP)
 waves: waveform.vcd
 	@echo
 	@echo "### WAVES ###"
-	gtkwave waveform.vcd
+	gtkwave waveform.vcd waveform.gtkw
 
 .PHONY: bit_stream
 bit_stream : $(BIT_STREAM)

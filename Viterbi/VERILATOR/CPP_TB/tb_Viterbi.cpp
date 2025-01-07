@@ -32,12 +32,13 @@ vluint64_t posedge_cnt = 0;
 
 int main(int argc, char** argv, char** env) {
     
-    const int FRAME_SIZE = 50;
+    const int FRAME_SIZE = 200;
+    const int DATA_WIDTH = 4;
     const int MAX_VAL = 15;
     const int CC_OUTPUT_NB = 2; 
     
-    module::MySource            src         (CC_OUTPUT_NB*FRAME_SIZE, MAX_VAL);
-    module::Packer              pck         (FRAME_SIZE, CC_OUTPUT_NB);
+    module::MySource            src         (CC_OUTPUT_NB*FRAME_SIZE, DATA_WIDTH);
+    module::Packer              pck         (FRAME_SIZE, CC_OUTPUT_NB, DATA_WIDTH);
     module::Viterbi_decoder     sw_vit_dec  (FRAME_SIZE);
     module::Comparator          comp_fpga   (FRAME_SIZE);
     module::Finalizer     <int> finalizer_hw(FRAME_SIZE);

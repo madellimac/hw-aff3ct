@@ -18,6 +18,9 @@ class Viterbi_Param(val polynomial : Array[Int], val Q_LLR : Int){
     val N_states : Int = (1 << (poly_deg-1))
     val Next_State : Array[Array[Int]] = Array.tabulate(2)(i => Array.tabulate(N_states)(j => ((i*N_states + j) / 2)))
 
+    val ACS_min_max: String ="max";
+    assert(ACS_min_max == "min" || ACS_min_max == "max", "ACS_min_max must be either 'min' or 'max'")
+
     val y : Array[Array[Array[Int]]] = Array.ofDim[Int](N_outputs, 2, N_states)
     for {
         i <- 0 until N_outputs
