@@ -17,14 +17,14 @@ class SurvivorPathStage(param : Viterbi_Param) extends Module {
     val ValidReg = RegInit(false.B)
 
      for(i <- 0 until (param.N_states/2)) {
-        Muxes(i                     ) := Mux(io.i_decision(i                     ), DataReg(2*i+1), DataReg(2*i))
-        Muxes(i + (param.N_states/2)) := Mux(io.i_decision(i + (param.N_states/2)), DataReg(2*i+1), DataReg(2*i))
+        Muxes(i                     ) := Mux(io.i_decision(i                     ), io.i_data(2*i+1), io.i_data(2*i))
+        Muxes(i + (param.N_states/2)) := Mux(io.i_decision(i + (param.N_states/2)), io.i_data(2*i+1), io.i_data(2*i))
      }
 
     when(io.i_valid) {
-        DataReg := io.i_data
+        DataReg := Cat(Muxes.reverse)
     }
-    io.o_data := Cat(Muxes.reverse)
+    io.o_data := DataReg
 
     ValidReg := io.i_valid
     io.o_valid := ValidReg

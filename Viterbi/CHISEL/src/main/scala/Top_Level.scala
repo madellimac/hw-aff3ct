@@ -63,6 +63,6 @@ object Top_LevelMain extends App {
     "-X", "verilog", 
     "-e", "verilog", 
     "--target-dir", "../VERILOG/generated/Viterbi"), 
-  Seq(ChiselGeneratorAnnotation(() => new Top_Level(SInt(8.W), 200)))
+  Seq(ChiselGeneratorAnnotation(() => new Top_Level(SInt(8.W), 100)))
   )
 }

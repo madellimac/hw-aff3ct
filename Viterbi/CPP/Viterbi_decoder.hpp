@@ -22,19 +22,24 @@ public:
 private:
 
     int encode(int i);
+
     int K;
+    int N;
     std::vector<int> poly_gen;
     int poly_deg;
+    int outputs_nb;
+
     int Q_LLR;
-    size_t outputs_nb;
+    int Q_BM;
+    int Q_SM;
     int SM_nb;
     int BM_nb;
-    int N;
 
     std::vector<std::vector<int>> BM;
     std::vector<std::vector<int>> BM_coef;
 
     std::vector<std::vector<int>> SM;
+    std::vector<std::vector<int>> survivor_path;
 
 };
 }

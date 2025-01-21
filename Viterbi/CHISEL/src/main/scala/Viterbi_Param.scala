@@ -3,19 +3,20 @@ package Viterbi
 import chisel3._
 import chisel3.util._
 
-class Viterbi_Param(val polynomial : Array[Int], val Q_LLR : Int){
+class Viterbi_Param(val polynomial : Array[Int], val Q_LLR : Int, val K : Int){
     
-    val poly_deg : Int = log2Ceil(polynomial(0))
+    val poly_deg : Int = log2Ceil(polynomial(0)) - 1
 
     val N_outputs : Int = polynomial.length
     val N_BM : Int = 1 << N_outputs
     val SP_length : Int = 6*(poly_deg+1)
 
-    val Q_BM : Int = Q_LLR + log2Ceil(N_BM)
-    val Q_IN : Int = Q_LLR * log2Ceil(N_BM)
-    val Q_SM : Int = 1 + log2Ceil(poly_deg*scala.math.pow(2, Q_LLR).toInt)
+    val Q_IN : Int = Q_LLR * N_outputs
+    val Q_BM : Int = 1 + log2Ceil(N_outputs*(1<<Q_LLR))
+    val Q_SM : Int = 1 + log2Ceil(poly_deg*(1<<Q_BM))
+    // val Q_SM : Int = 1 + log2Ceil(poly_deg*(1<<Q_LLR))
     
-    val N_states : Int = (1 << (poly_deg-1))
+    val N_states : Int = (1 << (poly_deg))
     val Next_State : Array[Array[Int]] = Array.tabulate(2)(i => Array.tabulate(N_states)(j => ((i*N_states + j) / 2)))
 
     val ACS_min_max: String ="max";
@@ -33,6 +34,10 @@ class Viterbi_Param(val polynomial : Array[Int], val Q_LLR : Int){
     println("N states =" + N_states)
     println("Poly 0 =" + polynomial(0))
     println("poly_deg =" + poly_deg)
+    println("Q_IN =" + Q_IN)
+    println("Q_LLR =" + Q_LLR)
+    println("Q_BM =" + Q_BM)
+    println("Q_SM =" + Q_SM)
     // Next_State.foreach { innerArray => innerArray.foreach(value => println(s"Value: $value"))}
 
     z.foreach { innerArray => innerArray.foreach(value => println(s"Value: $value"))}

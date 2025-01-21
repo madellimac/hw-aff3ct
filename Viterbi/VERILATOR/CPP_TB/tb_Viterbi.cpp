@@ -32,7 +32,7 @@ vluint64_t posedge_cnt = 0;
 
 int main(int argc, char** argv, char** env) {
     
-    const int FRAME_SIZE = 200;
+    const int FRAME_SIZE = 100;
     const int DATA_WIDTH = 4;
     const int MAX_VAL = 15;
     const int CC_OUTPUT_NB = 2; 

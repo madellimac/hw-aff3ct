@@ -40,7 +40,7 @@ class ViterbiDecoder(
     dontTouch(smu.io.o_decision)
     dontTouch(smu.io.o_valid)
 
-    spu.io.i_data := smu.io.o_decision
+    spu.io.i_decision := smu.io.o_decision
     spu.io.i_valid := smu.io.o_valid
 
     io.deq.bits := spu.io.o_data

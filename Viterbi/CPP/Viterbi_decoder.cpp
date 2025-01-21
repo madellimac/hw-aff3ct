@@ -8,13 +8,23 @@ Viterbi_decoder::Viterbi_decoder(const int K)
 {
     // compute the number of outputs of the conv encoder + the number of branch metrics
     poly_gen = {5, 7};
-    poly_deg = static_cast<int>(std::log2(poly_gen[0]));
-    std::cout << "poly deg = " << poly_deg << std::endl;
-    Q_LLR = 4;
     outputs_nb = poly_gen.size();
+    poly_deg = static_cast<int>(std::log2(poly_gen[0]));
+    N = outputs_nb * K;
+    
+    // val Q_BM : Int = 1 + log2Ceil(N_outputs*(1<<Q_LLR))
+    // val Q_SM : Int = 1 + log2Ceil(poly_deg*(1<<Q_BM))
+    
+    Q_LLR = 4;
+    Q_BM = 1 + std::log2(outputs_nb*(1<<Q_LLR));
+    Q_SM = 1 + std::log2(poly_deg*(1<<Q_BM));
     BM_nb = 1 << outputs_nb;
     SM_nb = 1 << poly_deg;
-    N = outputs_nb * K;
+    
+    std::cout << "QLLR=" << Q_LLR << std::endl;
+    std::cout << "QBM=" << Q_BM << std::endl;
+    std::cout << "QSM=" << Q_SM << std::endl;
+    std::cout << "poly deg = " << poly_deg << std::endl;
 
     // generate a matrix containing -1 and 1 for BM computation
     BM_coef.resize(outputs_nb, std::vector<int>(BM_nb, 0));
@@ -24,11 +34,9 @@ Viterbi_decoder::Viterbi_decoder(const int K)
         }
     }
 
-    // create an LLR array
-    // std::vector<std::vector<int>> LLRs(outputs_nb, std::vector<int>(K, 0));
-
     BM.resize(BM_nb, std::vector<int>(K, 0));
-    SM.resize(SM_nb, std::vector<int>(K, 0));
+    SM.resize(SM_nb, std::vector<int>(K+1, 0));
+    survivor_path.resize(SM_nb, std::vector<int>(K+1, 0));
 
     this->set_name("Viterbi_decoder");
     this->set_short_name("Viterbi_decoder");
@@ -46,24 +54,23 @@ Viterbi_decoder::Viterbi_decoder(const int K)
 
 int Viterbi_decoder::encode(int input)
 {
-    int bitsSortie = 0;
-    // Calculer les bits de sortie pour chaque polynôme
-    for (size_t i = 0; i < outputs_nb; i++) {
+    int output = 0;
+    // Compute the output of the convolutional encoder
+    for (int i = 0; i < outputs_nb; i++) {
         int polynome = poly_gen[i];
-        int bitSortie = 0;
+        int bit = 0;
 
-        // Appliquer XOR selon les positions des bits actifs dans le polynôme
+        // Apply XOR according to the generator polynomial
         for (int j = 0; j < poly_deg+1; j++) {
-            if ((polynome >> j) & 1) { // Vérifier si le bit j du polynôme est actif
-                bitSortie ^= (input >> j) & 1;
+            if ((polynome >> j) & 1) {
+                bit ^= (input >> j) & 1;
             }
         }
 
-
-        // Ajouter le bit de sortie au bon emplacement
-        bitsSortie |= (bitSortie << i);
+        // Pack the current bit to the output
+        output |= (bit << i);
     }
-    return bitsSortie;
+    return output;
 }
 void Viterbi_decoder::decode(int* input, int* output, const int frame_id)
 {
@@ -78,47 +85,95 @@ void Viterbi_decoder::decode(int* input, int* output, const int frame_id)
         }
     }
 
-    // for (auto i = 0; i < K; i++)
-    // {
-    //     for(auto j = 0; j < BM_nb; j++)
-    //         std::cout << BM[j][i] << " ";
-    //     std::cout << std::endl;
-    // }
-    // for(auto i = 0; i < 2*SM_nb; i++)
-    // {
-    //     std::cout << " " << i << "enc :" << encode(i) << std::endl;
-    // }
-    // std::cout << std::endl;
+    // BM display
+    for (auto i = 0; i < K; i++)
+    {
+        for(auto j = 0; j < BM_nb; j++)
+            std::cout << BM[j][i] << " ";
+        std::cout << std::endl;
+    }
+
     // SM computation
 
     // Init first stage
     for(auto j = 0; j < SM_nb; j++)
     {
         SM[j][0] = 0;
+        survivor_path[j][0] = 0;
     }
 
     int prev_st_0, prev_st_1;
     int ix_BM_0, ix_BM_1;
-    for (auto i = 1; i < K; i++)
+    int cnt = 0;
+    int threshold = 1<<(Q_SM-2);
+    bool threshold_detect = false;
+
+    for (auto i = 1; i < K+1; i++)
     {
+        cnt = 0;
         for(auto j = 0; j < SM_nb; j++)
         {
             prev_st_0 = (j&(~poly_deg))<<1;
             prev_st_1 = prev_st_0 | 1;
-            // std::cout << prev_st_0 << " "<< prev_st_1 << std::endl;
             ix_BM_0 = encode(j << 1);
             ix_BM_1 = encode((j<<1)|1);
-            // std::cout << ix_BM_0 << " "<< ix_BM_1 << std::endl;
-            SM[j][i] = std::max( SM[prev_st_0][i-1] + BM[ix_BM_0][i-1], SM[prev_st_1][i-1] + BM[ix_BM_1][i-1]);
+            if(SM[prev_st_0][i-1] + BM[ix_BM_0][i-1] > SM[prev_st_1][i-1] + BM[ix_BM_1][i-1])
+            {
+                survivor_path[j][i] = 0;
+                SM[j][i] = SM[prev_st_0][i-1] + BM[ix_BM_0][i-1];
+            }
+            else
+            {
+                survivor_path[j][i] = 1;
+                SM[j][i] = SM[prev_st_1][i-1] + BM[ix_BM_1][i-1];
+            }
+            if(threshold_detect == true)
+                SM[j][i] -= threshold;
+
+            if(SM[j][i] > threshold)
+                cnt++;
         }
+        if(cnt == SM_nb)
+            threshold_detect = true;
+        else
+            threshold_detect = false;
     }
-    for (auto i = 0; i < K; i++)
+    // Display SM and survivor path
+    for (auto i = 0; i < K+1; i++)
     {
         for(auto j = 0; j < SM_nb; j++)
             std::cout << SM[j][i] << " ";
         std::cout << std::endl;
     }
+    for (auto i = 0; i < K+1; i++)
+    {
+        for(auto j = 0; j < SM_nb; j++)
+            std::cout << survivor_path[j][i] << " ";
+        std::cout << std::endl;
+    }
 
+    // Compute output starting assuming returning to zero state
+    int st_ix = 0;
+    int mask = ((poly_deg) << 1) - 1;
+    int dec_threshold = (poly_deg-1)<<1;
 
+    for (auto i = K; i > 0; i--)
+    {
+        if(st_ix < dec_threshold)
+        {
+            output[i-1] = 0;
+        }
+        else
+        {
+            output[i-1] = 1;
+        }
+        st_ix = ((st_ix << 1) | survivor_path[st_ix][i]) & mask;
+        
+    }
+    // Display output
+    // std::cout << std::endl;
+    // for(auto i = 0; i < K; i++)
+    //     std::cout << output[i] << " ";
+    
 
 }
