@@ -29,6 +29,10 @@ INC = "-I$(STREAMPU)/include \
 	-I$(STREAMPU)/lib/rang/include \
 	-I$(STREAMPU)/lib/cpptrace/include/ctrace \
 	-I$(STREAMPU)/lib/cpptrace/include/cpptrace \
+    -I/home/cleroux/PROJECTS/aff3ct/lib/streampu/include \
+    -I/home/cleroux/PROJECTS/aff3ct/lib/cli/src \
+    -I/home/cleroux/PROJECTS/aff3ct/lib/MIPP/src \
+    -I/home/cleroux/PROJECTS/aff3ct/include \
 	-I/usr/include \
 	-I$(VERILATOR_DIR)/CPP_TB \
 	-I$(ROOT)/Common/streampu \
@@ -82,7 +86,7 @@ $(VERILATOR_DIR)/obj_dir/V$(TOP): .stamp.verilate
 	mkdir -p $(VERILATOR_DIR)/obj_dir
 	verilator --trace --x-assign unique --x-initial unique -cc $(VERILOG_DIR)/*.v --top-module $(TOP) --exe $(CPP_SRC) --Mdir $(VERILATOR_DIR)/obj_dir \
 	-CFLAGS $(INC) \
-	-LDFLAGS $(STREAMPU)/build_release/lib/libstreampu.a $(STREAMPU)/build_release/lib/cpptrace/lib/libcpptrace.a
+	-LDFLAGS $(STREAMPU)/build_release/lib/libstreampu.a $(STREAMPU)/build_release/lib/cpptrace/lib/libcpptrace.a /home/cleroux/PROJECTS/aff3ct/build/lib/libaff3ct-3.0.2-125-g0e421d4.a
 	@touch .stamp.verilate
 
 .PHONY:chisel 

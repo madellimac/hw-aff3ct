@@ -15,7 +15,7 @@
 
 #include <vector>
 #include <streampu.hpp>
-// #include <aff3ct-core.hpp>
+#include <aff3ct.hpp>
 
 using namespace spu;
 using namespace spu::module;
@@ -32,7 +32,7 @@ vluint64_t posedge_cnt = 0;
 
 int main(int argc, char** argv, char** env) {
     
-    const int FRAME_SIZE = 100;
+    const int FRAME_SIZE = 30;
     const int DATA_WIDTH = 4;
     const int MAX_VAL = 15;
     const int CC_OUTPUT_NB = 2; 
@@ -40,23 +40,24 @@ int main(int argc, char** argv, char** env) {
     module::MySource            src         (CC_OUTPUT_NB*FRAME_SIZE, DATA_WIDTH);
     module::Packer              pck         (FRAME_SIZE, CC_OUTPUT_NB, DATA_WIDTH);
     module::Viterbi_decoder     sw_vit_dec  (FRAME_SIZE);
-    module::Comparator          comp_fpga   (FRAME_SIZE);
+    module::Comparator          comp   (FRAME_SIZE);
     module::Finalizer     <int> finalizer_hw(FRAME_SIZE);
    
     VerilatorSimulation sim(FRAME_SIZE);
     SerialPort serial("/dev/ttyUSB2", 115200, FRAME_SIZE);
 
+    
+
     src         ["generate::output" ] = pck        ["pack::input"];
     pck         ["pack::output"]      = sim        ["simulate::input"];
     src         ["generate::output" ] = sw_vit_dec ["decode::input"];
-    sw_vit_dec  ["decode::output"   ] = comp_fpga  ["compare::input1"];
-    
-    sim         ["simulate::output" ] = comp_fpga  ["compare::input2"];
+    sw_vit_dec  ["decode::output"   ] = comp       ["compare::input1"];
+    sim         ["simulate::output" ] = comp       ["compare::input2"];
 
 //    src         ["generate::output" ] = serial          ["write::input"];
-//    serial      ["write::output"    ] = comp_fpga       ["compare::input2"];
+//    serial      ["write::output"    ] = comp       ["compare::input2"];
     
-    comp_fpga   ["compare::output"  ] = finalizer_hw    ["finalize::in"];
+    comp   ["compare::output"  ] = finalizer_hw    ["finalize::in"];
 
     // std::vector<runtime::Task*> first = {&initializer("initialize")};
     std::vector<runtime::Task*> first = {&src("generate")};
@@ -66,6 +67,8 @@ int main(int argc, char** argv, char** env) {
     std::ofstream file("graph.dot");
     seq.export_dot(file);
 
+    
+
     for (auto lt : seq.get_tasks_per_types())
         for (auto t : lt)
         {
@@ -74,6 +77,10 @@ int main(int argc, char** argv, char** env) {
         }
 
     seq.exec_seq();
+
+    std::cout << "#" << std::endl;
+    
+	tools::Stats::show(seq.get_modules_per_types(), true);
     // seq.exec_seq();
 
 }

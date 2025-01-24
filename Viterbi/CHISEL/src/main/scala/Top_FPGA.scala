@@ -25,7 +25,8 @@ class Top_FPGA[T <: Data](dataType : T, pFrameSize: Int) extends Module {
     val K = pFrameSize
 
     val octal_poly: Array[String] = Array("5", "7")
-    //val octal_poly: Array[String] = Array("13", "15")
+    // val octal_poly: Array[String] = Array("13", "15")
+    // val octal_poly: Array[String] = Array("11", "13", "15")
     // val octal_poly: Array[String] = Array("133", "155")
     // val octal_poly: Array[String] = Array("13", "15", "10")
     val polynomial: Array[Int] = octal_poly.map(octalString => Integer.parseInt(octalString, 8))
