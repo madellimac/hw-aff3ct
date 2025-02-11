@@ -5,9 +5,11 @@ import UART._
 
 import chisel3._
 import chisel3.util._
-import chisel3.stage.{ChiselStage, ChiselGeneratorAnnotation}
-import firrtl.options.TargetDirAnnotation
-import firrtl.transforms.FlattenAnnotation
+import _root_.circt.stage.{ChiselStage}
+import chisel3.stage.{ChiselGeneratorAnnotation}
+// import chisel3.stage.{ChiselStage, ChiselGeneratorAnnotation}
+// import firrtl.options.TargetDirAnnotation
+// import firrtl.transforms.FlattenAnnotation
 
 class Top_Level[T <: Bits](dataType : T, pFrameSize: Int) extends Module {
     val io = IO(new Bundle {
@@ -56,13 +58,26 @@ class Top_Level[T <: Bits](dataType : T, pFrameSize: Int) extends Module {
 
 }
 
+// object Top_LevelMain extends App {
+//   val stage = new ChiselStage
+//   stage.execute(
+//     Array(
+//     "-X", "verilog", 
+//     "-e", "verilog", 
+//     "--target-dir", "../VERILOG/generated/Viterbi"), 
+//   Seq(ChiselGeneratorAnnotation(() => new Top_Level(SInt(8.W), 30)))
+//   )
+// }
+
 object Top_LevelMain extends App {
-  val stage = new ChiselStage
-  stage.execute(
-    Array(
-    "-X", "verilog", 
-    "-e", "verilog", 
-    "--target-dir", "../VERILOG/generated/Viterbi"), 
-  Seq(ChiselGeneratorAnnotation(() => new Top_Level(SInt(8.W), 30)))
-  )
+  _root_.circt.stage.ChiselStage.emitSystemVerilog(
+    new Top_Level(SInt(8.W), 30),
+    firtoolOpts = Array.concat(
+      Array(
+        "--disable-all-randomization",
+        "--strip-debug-info",
+        "--split-verilog",
+        "-o", "../VERILOG/generated/Viterbi")
+      )
+    )      
 }

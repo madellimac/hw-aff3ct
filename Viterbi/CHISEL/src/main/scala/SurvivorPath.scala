@@ -43,7 +43,7 @@ class SurvivorPath( param : Viterbi_Param) extends Module {
         SPStage(i).i_decision := s_decision
     }
 
-    io.o_data := SPStage(param.SP_length-1).o_data(0).asSInt()
+    io.o_data := SPStage(param.SP_length-1).o_data(0).asSInt
 
     val shiftReg = RegInit(VecInit(Seq.fill(param.SP_length)(false.B)))
 

@@ -5,9 +5,10 @@ import UART._
 
 import chisel3._
 import chisel3.util._
-import chisel3.stage.{ChiselStage, ChiselGeneratorAnnotation}
-import firrtl.options.TargetDirAnnotation
-import firrtl.transforms.FlattenAnnotation
+import _root_.circt.stage.{ChiselStage}
+// import chisel3.stage.{ChiselStage, ChiselGeneratorAnnotation}
+// import firrtl.options.TargetDirAnnotation
+// import firrtl.transforms.FlattenAnnotation
 
 class Top_FPGA[T <: Data](dataType : T, pFrameSize: Int) extends Module {
     val io = IO(new Bundle {

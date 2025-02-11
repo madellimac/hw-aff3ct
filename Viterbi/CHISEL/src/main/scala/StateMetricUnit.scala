@@ -19,7 +19,7 @@ class StateMetricUnit( param : Viterbi_Param) extends Module {
         vDec(i) := vACS(i).o_decision
     }
 
-    io.o_decision := Cat(vDec.reverse).asUInt()
+    io.o_decision := Cat(vDec.reverse).asUInt
 
     io.o_valid := vACS(0).o_valid
 

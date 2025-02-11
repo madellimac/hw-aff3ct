@@ -1,5 +1,5 @@
 TOP = Top_Level
-TOP_FILE = $(TOP).v
+TOP_FILE = $(TOP).sv
 
 PROJECT = Viterbi
 
@@ -84,7 +84,7 @@ $(VERILATOR_DIR)/obj_dir/V$(TOP): .stamp.verilate
 	@echo "### VERILATING ###"
 	@echo "##################"
 	mkdir -p $(VERILATOR_DIR)/obj_dir
-	verilator --trace --x-assign unique --x-initial unique -cc $(VERILOG_DIR)/*.v --top-module $(TOP) --exe $(CPP_SRC) --Mdir $(VERILATOR_DIR)/obj_dir \
+	verilator --trace --x-assign unique --x-initial unique -cc $(VERILOG_DIR)/*.sv --top-module $(TOP) --exe $(CPP_SRC) --Mdir $(VERILATOR_DIR)/obj_dir \
 	-CFLAGS $(INC) \
 	-LDFLAGS $(STREAMPU)/build_release/lib/libstreampu.a $(STREAMPU)/build_release/lib/cpptrace/lib/libcpptrace.a /home/cleroux/PROJECTS/aff3ct/build/lib/libaff3ct-3.0.2-125-g0e421d4.a
 	@touch .stamp.verilate
