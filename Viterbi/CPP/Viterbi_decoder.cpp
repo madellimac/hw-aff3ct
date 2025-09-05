@@ -9,7 +9,10 @@ Viterbi_decoder::Viterbi_decoder(const int K)
     // compute the number of outputs of the conv encoder + the number of branch metrics
     // poly_gen = {9, 11, 13};
     poly_gen = {5, 7};
-    outputs_nb = poly_gen.size();
+    // poly_gen = {11, 13};
+    // poly_gen = {39, 43}; // 47,53 en octal
+    // poly_gen = {369, 491}; // 561,753 en octal
+    outputs_nb = poly_gen.size(); 
     poly_deg = static_cast<int>(std::log2(poly_gen[0]));
     N = outputs_nb * K;
     

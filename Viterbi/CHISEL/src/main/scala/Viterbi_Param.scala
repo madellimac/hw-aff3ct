@@ -9,7 +9,7 @@ class Viterbi_Param(val polynomial : Array[Int], val Q_LLR : Int, val K : Int){
 
     val N_outputs : Int = polynomial.length
     val N_BM : Int = 1 << N_outputs
-    val SP_length : Int = 6*(poly_deg+1)
+    val SP_length : Int = 8*(poly_deg+1)
 
     val Q_IN : Int = Q_LLR * N_outputs
     val Q_BM : Int = 1 + log2Ceil(N_outputs*(1<<Q_LLR))

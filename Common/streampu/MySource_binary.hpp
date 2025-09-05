@@ -1,5 +1,5 @@
-#ifndef MYSOURCE_H
-#define MYSOURCE_H
+#ifndef MYSOURCE_BINARY_H
+#define MYSOURCE_BINARY_H
 
 #include "streampu.hpp"
 
@@ -8,7 +8,7 @@ namespace spu
 namespace module
 {
 
-class MySource  : public Stateful {
+class MySource_binary  : public Stateful {
 
 private:
     
@@ -17,8 +17,8 @@ private:
 
 public:
 
-MySource(int frame_size, int data_width);
-    virtual ~MySource();
+MySource_binary(int frame_size, int data_width);
+    virtual ~MySource_binary();
 
 protected:
 

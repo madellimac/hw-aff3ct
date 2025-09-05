@@ -20,6 +20,25 @@ class ViterbiDecoder(
     val smu = Module(new StateMetricUnit(param)) 
     val spu = Module(new SurvivorPath(param))
 
+    // Compteur de cycles
+    val cycleCounter = RegInit(0.U(log2Ceil(param.K).W))
+
+    when(io.enq.valid) {
+        cycleCounter := cycleCounter + 1.U
+        when(cycleCounter === (param.K - 1).U) {
+            cycleCounter := 0.U
+        }
+    }
+
+    dontTouch(cycleCounter)
+
+    val init = Wire(Bool())
+    init := (cycleCounter === (param.K - 1).U)
+
+    dontTouch(init)
+    // smu.io.i_init := false.B
+    smu.io.i_init := init
+
     bmu.io.i_valid := io.enq.valid
 
     // Assign BMU inputs
